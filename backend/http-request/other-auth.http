@@ -1,0 +1,5 @@
+###
+
+# @no-cookie-jar
+POST {{baseUrl}}/api/auth/refresh
+Content-Type: application/json

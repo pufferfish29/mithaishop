@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: mithai-database
+    env_file:
+      - .env
+    ports:
+      - "5433:5432"
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+  redis:
+    image: redis:latest
+    container_name: redis-database
+    env_file:
+      - .env
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/var/lib/redis
+  nestjs-auth:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgres
+      - redis
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+volumes:
+  pg-data:
+  redis-data:

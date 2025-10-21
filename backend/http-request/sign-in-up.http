@@ -1,0 +1,49 @@
+
+###
+POST {{baseUrl}}/api/auth/signup
+Content-Type: application/json
+
+{
+  "username": "apple",
+  "password": "Applefruit#12",
+  "email": "apple@gmail.com"
+}
+
+
+###
+# @name signinResponse
+POST {{baseUrl}}/api/auth/signin
+Content-Type: application/json
+
+{
+  "password": "Applefruit#12",
+  "email": "apple@gmail.com"
+}
+
+# @after
+{{
+const fs = require('fs');
+const path = require('path');
+const envPath = path.resolve(__dirname, 'http-client.env.json');
+let env = {};
+
+try { 
+  const content = fs.readFileSync(envPath, 'utf8')
+  env = JSON.parse(content); 
+  env.local = env.local || {};
+
+  const body = typeof response.body === 'string' 
+  ? JSON.parse(response.body) 
+  : response.body;
+
+
+  env.local.token = body.accessToken;
+  env.development.token = body.accessToken;
+  const stringifyEnv = JSON.stringify(env, null,2)
+  fs.writeFileSync(envPath, stringifyEnv);
+  
+  exports.accessToken = env.local.accessToken;
+} catch(e) {
+  console.log(e)
+}
+}}

@@ -1,0 +1,21 @@
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv {
+      JWT_ACCESSTOKEN_SECRET: string;
+      JWT_ACCESSTOKEN_EXPIRESIN: string;
+      JWT_REFRESHTOKEN_SECRET: string;
+      JWT_REFRESHTOKEN_EXPIRESIN: string;
+      POSTGRES_HOST: string;
+      POSTGRES_HOST_LOCAL: string;
+      POSTGRES_USER: string;
+      POSTGRES_PASSWORD: string;
+      POSTGRES_DB: string;
+      POSTGRES_PORT: string;
+      REDIS_HOST: string;
+      REDIS_PORT: string;
+      NODE_ENV: 'dev' | 'prod';
+    }
+  }
+}
+
+export {};
