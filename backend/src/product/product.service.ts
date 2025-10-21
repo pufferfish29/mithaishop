@@ -1,30 +1,57 @@
-import { ConflictException, Injectable } from "@nestjs/common";
-import { CreateProductDto } from "./dto/create-product.dto";
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Product } from "./entities/prodcut.entity";
 import { Repository } from "typeorm";
+import { Product } from "./entities/prodcut.entity";
+import { CreateProductDto } from "./dto/create-product.dto";
 
 @Injectable()
 export class ProductService {
-  @InjectRepository(Product)
-  private readonly productRepository: Repository<Product>;
+  constructor(
+    @InjectRepository(Product)
+    private readonly productRepository: Repository<Product>,
+  ) {}
 
   async create(createProductDto: CreateProductDto) {
-    const prod = await this.productRepository.findOneBy({
+    const existing = await this.productRepository.findOneBy({
       name: createProductDto.name,
     });
-    if (prod) {
-      throw new ConflictException("product already exists");
+    if (existing) {
+      throw new ConflictException("Product already exists");
     }
-    await this.productRepository.insert(createProductDto);
-    return createProductDto;
+    const newProduct = this.productRepository.create(createProductDto);
+    return this.productRepository.save(newProduct);
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} service`;
+  async findAll(page = 1) {
+    const take = 50;
+    const skip = (page - 1) * take;
+    const [items, total] = await this.productRepository.findAndCount({
+      order: { name: "ASC" },
+      take,
+      skip,
+    });
+    return { total, page, items };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} service`;
+  async findOne(idOrName: number | string) {
+    const where =
+      typeof idOrName === "number" ? { id: idOrName } : { name: idOrName };
+    const product = await this.productRepository.findOneBy(where);
+    if (!product) {
+      throw new NotFoundException("Product not found");
+    }
+    return product;
+  }
+
+  async remove(id: number) {
+    const result = await this.productRepository.delete(id);
+    if (!result.affected) {
+      throw new NotFoundException("Product not found");
+    }
+    return { deleted: true };
   }
 }

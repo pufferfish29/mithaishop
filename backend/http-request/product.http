@@ -1,5 +1,5 @@
 ###
-POST {{baseUrl}}/api/products
+POST {{baseUrl}}/api/product
 Content-Type: application/json
 
 {

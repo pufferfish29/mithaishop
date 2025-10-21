@@ -1,25 +1,39 @@
-import { Controller, Get, Post, Body, Param, Delete } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Query,
+} from "@nestjs/common";
 import { ProductService } from "./product.service";
 import { CreateProductDto } from "./dto/create-product.dto";
 import { Public } from "src/auth/decorators/auth-guard.decorator";
 
-@Controller("products")
-export class ServicesController {
-  constructor(private readonly servicesService: ProductService) {}
+@Controller("product")
+export class ProductController {
+  constructor(private readonly productService: ProductService) {}
 
   @Post()
   @Public()
-  create(@Body() CreateProductDto: CreateProductDto) {
-    return this.servicesService.create(CreateProductDto);
+  create(@Body() dto: CreateProductDto) {
+    return this.productService.create(dto);
   }
 
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.servicesService.findOne(+id);
+  @Get()
+  findAll(@Query("page") page?: number) {
+    return this.productService.findAll(Number(page) || 1);
+  }
+
+  @Get(":idOrName")
+  findOne(@Param("idOrName") idOrName: string) {
+    const parsedId = Number(idOrName);
+    return this.productService.findOne(isNaN(parsedId) ? idOrName : parsedId);
   }
 
   @Delete(":id")
   remove(@Param("id") id: string) {
-    return this.servicesService.remove(+id);
+    return this.productService.remove(+id);
   }
 }
