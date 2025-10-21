@@ -1,5 +1,6 @@
 ###
 POST {{baseUrl}}/api/products
+Content-Type: application/json
 
 {
   "name": "laddu",
