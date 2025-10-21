@@ -5,22 +5,22 @@ import {
   InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
-} from '@nestjs/common';
-import { UserService } from 'src/user/user.service';
-import { compare, genSalt, hash } from 'bcryptjs';
-import { FindUserDto } from './dto/find-user.dto';
-import { SigninUserDto, SignupUserDto } from './dto/create-auth.dto';
+} from "@nestjs/common";
+import { UserService } from "src/user/user.service";
+import { compare, genSalt, hash } from "bcryptjs";
+import { FindUserDto } from "./dto/find-user.dto";
+import { SigninUserDto, SignupUserDto } from "./dto/create-auth.dto";
 import {
   ACCESS_TOKEN_PROVDER,
   REFRESH_TOKEN_PROVDER,
-} from 'src/common/providers/jwt-token.provider';
-import { JwtService } from '@nestjs/jwt';
-import { BAD_COOKIE, INVALID_CREDENTIALS } from './constants/constants';
-import { RedisService } from 'src/redis/redis.service';
-import ms from 'ms';
+} from "src/common/providers/jwt-token.provider";
+import { JwtService } from "@nestjs/jwt";
+import { BAD_COOKIE, INVALID_CREDENTIALS } from "./constants/constants";
+import { RedisService } from "src/redis/redis.service";
+import ms from "ms";
 
-import type { TError } from './types/error.types';
-import type { TPayload, TUser } from './types/auth.type';
+import type { TError } from "./types/error.types";
+import type { TPayload, TUser } from "./types/auth.type";
 
 @Injectable()
 export class AuthService {
@@ -30,11 +30,11 @@ export class AuthService {
     @Inject(ACCESS_TOKEN_PROVDER)
     private readonly accessTokenProvider: JwtService,
     @Inject(REFRESH_TOKEN_PROVDER)
-    private readonly refreshTokenProvider: JwtService,
+    private readonly refreshTokenProvider: JwtService
   ) {}
 
   private async generateTokensAndStore<T extends object & TPayload>(
-    _payload: T,
+    _payload: T
   ) {
     const payload = { email: _payload.email, id: _payload.id };
 
@@ -46,11 +46,11 @@ export class AuthService {
     const stateOk = await this.redisService.set(
       `refresh:${_payload.id}`,
       refreshToken,
-      ms('7d'),
+      ms("7d")
     );
 
-    if (stateOk !== 'OK') {
-      throw new InternalServerErrorException('Failed to store refresh token');
+    if (stateOk !== "OK") {
+      throw new InternalServerErrorException("Failed to store refresh token");
     }
 
     return { accessToken, refreshToken };
@@ -60,7 +60,7 @@ export class AuthService {
     const existingUser = await this.userService.findOne({
       email: createAuthDto.email,
     });
-    if (existingUser) throw new ConflictException('user already exists');
+    if (existingUser) throw new ConflictException("user already exists");
 
     const salt = await genSalt();
     const hashedPassword = await hash(createAuthDto.password, salt);
@@ -72,7 +72,7 @@ export class AuthService {
 
   async findOne(findUserDto: FindUserDto) {
     const user = await this.userService.findOne({ id: findUserDto.id });
-    if (!user) throw new NotFoundException('user not found');
+    if (!user) throw new NotFoundException("user not found");
     return user;
   }
 
@@ -84,7 +84,7 @@ export class AuthService {
     const { password: hashedPassword, ...other } = user;
     const comparePassword = await compare(
       signinUserDto.password,
-      hashedPassword,
+      hashedPassword
     );
     if (!comparePassword) return null;
     else return other;
@@ -95,7 +95,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException({
         code: INVALID_CREDENTIALS,
-        message: 'invalid credentials',
+        message: "invalid credentials",
       });
     }
 
@@ -108,7 +108,7 @@ export class AuthService {
     if (!compareCookie || token !== compareCookie) {
       const errObj: TError = {
         code: BAD_COOKIE,
-        message: 'sign in again',
+        message: "sign in again",
       };
       throw new UnauthorizedException(errObj);
     }

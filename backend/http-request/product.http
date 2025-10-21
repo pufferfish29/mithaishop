@@ -1,0 +1,8 @@
+###
+POST {{baseUrl}}/api/products
+
+{
+  "name": "laddu",
+  "unitPrice": 12,
+  "pricePerKG": 100
+}
