@@ -22,17 +22,20 @@ export class ProductController {
   }
 
   @Get()
+  @Public()
   findAll(@Query("page") page?: number) {
     return this.productService.findAll(Number(page) || 1);
   }
 
   @Get(":idOrName")
+  @Public()
   findOne(@Param("idOrName") idOrName: string) {
     const parsedId = Number(idOrName);
     return this.productService.findOne(isNaN(parsedId) ? idOrName : parsedId);
   }
 
   @Delete(":id")
+  @Public()
   remove(@Param("id") id: string) {
     return this.productService.remove(+id);
   }

@@ -1,4 +1,4 @@
-###
+### Create Product
 POST {{baseUrl}}/api/product
 Content-Type: application/json
 
@@ -7,3 +7,15 @@ Content-Type: application/json
   "unitPrice": 12,
   "pricePerKG": 100
 }
+
+### Get All Products (page optional)
+GET {{baseUrl}}/api/product?page=1
+
+### Get One Product by ID
+GET {{baseUrl}}/api/product/1
+
+### Get One Product by Name
+GET {{baseUrl}}/api/product/laddu
+
+### Delete Product by ID
+DELETE {{baseUrl}}/api/product/1
