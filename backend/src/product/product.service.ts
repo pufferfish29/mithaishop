@@ -28,7 +28,7 @@ export class ProductService {
 
   async findAll(page = 1) {
     const take = 50;
-    const skip = (page - 1) * take;
+    const skip = (Math.max(1, page) - 1) * take;
     const [items, total] = await this.productRepository.findAndCount({
       order: { name: "ASC" },
       take,
