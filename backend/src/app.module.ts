@@ -10,6 +10,7 @@ import { datasource } from './database/datasource';
 import { ConfigModule } from '@nestjs/config';
 import { RedisModule } from './redis/redis.module';
 import { CommonModule } from './common/common.module';
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { CommonModule } from './common/common.module';
     AuthModule,
     RedisModule,
     CommonModule,
+    ServicesModule,
   ],
   controllers: [AppController],
   providers: [
