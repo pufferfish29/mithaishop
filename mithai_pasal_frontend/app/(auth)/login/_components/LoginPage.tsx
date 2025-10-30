@@ -20,7 +20,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 
 const loginSchema = z.object({
-  username: z.string().min(1, "Enter at least one character"),
+  email: z.string().min(1, "Enter at least one character"),
   password: z.string().min(8, "Password must be at least 8 characters"),
 });
 
@@ -30,17 +30,34 @@ const Login = () => {
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   });
 
+  const {
+    handleSubmit,
+    control,
+    setError,
+    formState: { errors },
+  } = form;
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
-    const res = await axios.post("http://localhost:3000/api/auth/signin", {
-      emali: data.username,
-      password: data.password,
-    });
-    console.log(res);
+    try {
+      const res = await axios.post("http://localhost:3000/api/auth/signin", {
+        email: data.email,
+        password: data.password,
+      });
+      console.log("Login successful", res.data);
+    } catch (err: any) {
+      if (axios.isAxiosError(err)) {
+        const field = err.response?.data?.field || "email";
+        const message =
+          err.response?.data?.message || "Login failed. Please try again.";
+        setError(field as "email" | "password", { type: "server", message });
+      } else {
+        console.error(err);
+      }
+    }
   };
 
   return (
@@ -64,15 +81,15 @@ const Login = () => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <FormField
                 control={form.control}
-                name="username"
+                name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-md">Username</FormLabel>
+                    <FormLabel className="text-md">email</FormLabel>
                     <FormControl>
                       <Input
                         className="py-5"
                         {...field}
-                        placeholder="Enter your username"
+                        placeholder="Enter your email"
                       />
                     </FormControl>
                     <FormMessage />
