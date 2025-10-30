@@ -1,6 +1,7 @@
-import AdminHeader from '@/components/dashboard/AdminHeader';
-import AdminSidebar from '@/components/dashboard/AdminSidebar';
-import { SidebarProvider } from '@/components/ui/sidebar';
+import AuthWrapper from "@/components/authwrapper";
+import AdminHeader from "@/components/dashboard/AdminHeader";
+import AdminSidebar from "@/components/dashboard/AdminSidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function DashboardLayout({
   children,
@@ -8,16 +9,19 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="bg-[#f7f1ed]">
-      <SidebarProvider>
-        <AdminSidebar />
+    <AuthWrapper>
+      {" "}
+      <div className='bg-[#f7f1ed]'>
+        <SidebarProvider>
+          <AdminSidebar />
 
-        <main className="w-full overflow-y-auto">
-          <AdminHeader />
+          <main className='w-full overflow-y-auto'>
+            <AdminHeader />
 
-          {children}
-        </main>
-      </SidebarProvider>
-    </div>
+            {children}
+          </main>
+        </SidebarProvider>
+      </div>
+    </AuthWrapper>
   );
 }
