@@ -30,11 +30,11 @@ export class AuthService {
     @Inject(ACCESS_TOKEN_PROVDER)
     private readonly accessTokenProvider: JwtService,
     @Inject(REFRESH_TOKEN_PROVDER)
-    private readonly refreshTokenProvider: JwtService
+    private readonly refreshTokenProvider: JwtService,
   ) {}
 
   private async generateTokensAndStore<T extends object & TPayload>(
-    _payload: T
+    _payload: T,
   ) {
     const payload = { email: _payload.email, id: _payload.id };
 
@@ -46,7 +46,7 @@ export class AuthService {
     const stateOk = await this.redisService.set(
       `refresh:${_payload.id}`,
       refreshToken,
-      ms("7d")
+      ms("7d"),
     );
 
     if (stateOk !== "OK") {
@@ -84,7 +84,7 @@ export class AuthService {
     const { password: hashedPassword, ...other } = user;
     const comparePassword = await compare(
       signinUserDto.password,
-      hashedPassword
+      hashedPassword,
     );
     if (!comparePassword) return null;
     else return other;

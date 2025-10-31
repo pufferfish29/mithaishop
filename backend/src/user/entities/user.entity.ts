@@ -1,17 +1,24 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { COLUMN_DEFAULT_LENGTH } from '../constants/constants';
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { COLUMN_DEFAULT_LENGTH, USER_ROLE } from "../constants/constants";
 
-@Entity({ name: 'user' })
+@Entity({ name: "user" })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: COLUMN_DEFAULT_LENGTH })
+  @Column({ type: "varchar", length: COLUMN_DEFAULT_LENGTH })
   username: string;
 
-  @Column({ type: 'varchar', length: COLUMN_DEFAULT_LENGTH, unique: true })
+  @Column({ type: "varchar", length: COLUMN_DEFAULT_LENGTH, unique: true })
   email: string;
 
-  @Column({ type: 'varchar', length: COLUMN_DEFAULT_LENGTH })
+  @Column({ type: "varchar", length: COLUMN_DEFAULT_LENGTH })
   password: string;
+
+  @Column({
+    type: "enum",
+    enum: USER_ROLE,
+    default: USER_ROLE.USER,
+  })
+  role: USER_ROLE;
 }
