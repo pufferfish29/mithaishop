@@ -43,10 +43,16 @@ const Login = () => {
   } = form;
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/signin", {
-        email: data.email,
-        password: data.password,
-      });
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/signin",
+        {
+          email: data.email,
+          password: data.password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
       console.log("Login successful", res.data);
     } catch (err: any) {
       if (axios.isAxiosError(err)) {

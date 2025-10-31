@@ -29,10 +29,9 @@ export class AuthController {
 
     response.cookie("refreshToken", refreshToken, {
       maxAge: ms("7d"),
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV !== "dev" ? "none" : "lax",
       secure: process.env.NODE_ENV !== "dev",
       httpOnly: true,
-      path: "/api",
     });
 
     return signinResponse;
@@ -57,7 +56,7 @@ export class AuthController {
 
     response.cookie("refreshToken", newRefreshToken, {
       maxAge: ms("7d"),
-      sameSite: "lax",
+      sameSite: process.env.NODE_ENV !== "dev" ? "none" : "lax",
       secure: process.env.NODE_ENV !== "dev",
       httpOnly: true,
       path: "/api",
