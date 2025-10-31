@@ -3,7 +3,7 @@
 import React from 'react';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '../ui/sidebar';
 
-import { Settings, LogOut, Candy, LineChart, Package } from 'lucide-react';
+import { Settings, LogOut, Candy, LineChart, Package, User2 } from 'lucide-react';
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -12,6 +12,11 @@ import { Button } from '../ui/button';
 const items = [
   { title: 'Sales Tracking', url: '/dashboard/sales', icon: LineChart },
   { title: 'Products', url: '/dashboard/products', icon: Package },
+  {
+    title: 'Users',
+    url: '/dashboard/users',
+    icon: User2,
+  },
 ];
 
 const footerItem = [

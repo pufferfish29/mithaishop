@@ -6,31 +6,53 @@ import * as z from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
+// import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
-import { BiCloudUpload } from 'react-icons/bi';
-import { BsFileEarmarkImage } from 'react-icons/bs';
+import { addProduct } from '@/apicalls/dashboard/product';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+// import { BiCloudUpload } from 'react-icons/bi';
+// import { BsFileEarmarkImage } from 'react-icons/bs';
 
 const SweetsSchema = z.object({
   name: z.string().min(3, 'Name must be of 3 characters'),
-  description: z.string().min(3, 'Name must be of 3 characters'),
+  pricePerKg: z.string(),
   price: z.string(),
-  productImage: z.string().min(1, 'Image cannot be empty'),
+  // productImage: z.string().min(1, 'Image cannot be empty'),
 });
 
 const ProductAddForm = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof SweetsSchema>>({
     resolver: zodResolver(SweetsSchema),
     defaultValues: {
       name: '',
-      description: '',
+      pricePerKg: '',
       price: '',
-      productImage: '',
+      // productImage: '',
     },
   });
 
   const onSubmit = async (data: z.infer<typeof SweetsSchema>) => {
-    console.log(data);
+    const payload = {
+      name: data.name,
+      pricePerKG: Number(data.pricePerKg),
+      unitPrice: Number(data.price),
+    };
+    try {
+      const response = await addProduct(payload);
+      if (response?.status === 201) {
+        toast.success('Product added successfully');
+        router.push('/dashboard/products');
+      } else {
+        toast.error('Failed to add product');
+      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+      toast.error(errorMessage);
+      console.log(errorMessage);
+    }
   };
 
   return (
@@ -51,7 +73,20 @@ const ProductAddForm = () => {
         />
         <FormField
           control={form.control}
-          name="description"
+          name="pricePerKg"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-md">Price Per kg</FormLabel>
+              <FormControl>
+                <Input className="py-5" {...field} placeholder="$2" />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        {/* <FormField
+          control={form.control}
+          name="pricePerKg"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-md">Description</FormLabel>
@@ -61,7 +96,7 @@ const ProductAddForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         <FormField
           control={form.control}
           name="price"
@@ -75,7 +110,7 @@ const ProductAddForm = () => {
             </FormItem>
           )}
         />
-        <FormField
+        {/* <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
@@ -104,7 +139,7 @@ const ProductAddForm = () => {
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
         <Button className="w-full bg-orange-500 h-11 text-[18px]" type="submit">
           Add Product
         </Button>

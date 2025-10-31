@@ -1,3 +1,3 @@
 export default function Home() {
-  return <main>Mithau Pasal</main>;
+  return <main>Mithai Pasal</main>;
 }
