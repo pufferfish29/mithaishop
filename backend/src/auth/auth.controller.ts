@@ -22,11 +22,16 @@ export class AuthController {
   @Post("signin")
   async signin(
     @Body() signinUserDto: SigninUserDto,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
   ) {
     const { refreshToken, ...signinResponse } =
       await this.authService.login(signinUserDto);
 
+    /**
+     * refresh token is sent in cookie
+     * for now its available in response body as well
+     * but this is really bad idea and 100% prone to attacks
+     */
     response.cookie("refreshToken", refreshToken, {
       maxAge: ms("7d"),
       sameSite: process.env.NODE_ENV !== "dev" ? "none" : "lax",
@@ -34,7 +39,10 @@ export class AuthController {
       httpOnly: true,
     });
 
-    return signinResponse;
+    /**
+     * if possible rely on interceptors. Refresh token here is bad
+     */
+    return { ...signinResponse, refreshToken };
   }
 
   @Get(":id")
@@ -47,7 +55,7 @@ export class AuthController {
   @Post("refresh")
   async refreshToken(
     @Req() request: Request,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
   ) {
     const refreshToken = (request.cookies as TCookieObj).refreshToken!;
     const user = request.user as TPayload;
