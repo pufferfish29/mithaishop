@@ -39,12 +39,10 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
 
         if (!parsedCredentials.success) throw new Error("Invalid Credentials");
 
-        console.log("Parsed Credentials: ", parsedCredentials);
-
         const { email, password } = parsedCredentials.data;
 
         const res = await loginWithEmailAndPassword(email, password);
-        // console.log("Response: ", res);
+        console.log("Response: ", res);
         if (!res) throw new Error("Invalid Credentials");
 
         const decodedAccess = jwtDecode(res.accessToken);
@@ -53,6 +51,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
           accessToken: res.accessToken,
           refreshToken: res.refreshToken,
           email,
+
           accessTokenExpires:
             (decodedAccess?.exp ??
               Math.floor(Date.now() / 1000) + AUTH_CONFIG.accessTokenExpiry) *

@@ -10,6 +10,7 @@ declare module "next-auth" {
     user: {
       username: string;
       email: string;
+      role: string;
     } & DefaultSession["user"];
   }
 
@@ -25,6 +26,7 @@ declare module "next-auth" {
     refreshToken: string;
     email: string;
     username: string;
+    role: string;
     error?: string;
   }
 }

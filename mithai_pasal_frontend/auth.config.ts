@@ -6,7 +6,7 @@ import { API_URL } from "./config/constant";
 
 export async function refreshToken(token: any) {
   try {
-    const res = await fetch(`${API_URL}/`, {
+    const res = await fetch(`${API_URL}/auth/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,7 +51,9 @@ export const authConfig = {
         token.accessTokenExpires = user.accessTokenExpires;
         token.refreshToken = user.refreshToken;
         token.email = user.email;
+        token.role = user.role;
         token.username = user.username;
+
         return token;
       }
 
@@ -70,12 +72,13 @@ export const authConfig = {
         ...session.user,
         username: token.username,
         email: token.email,
+        role: token.role,
       };
       session.accessToken = token.accessToken;
-      session.refreshToken = token.accessToken;
+      session.refreshToken = token.refreshToken;
       session.error = token.error;
       session.expires = new Date(token.accessTokenExpires).toISOString();
-
+      // console.log("Session: ", session);
       return session;
     },
   },
