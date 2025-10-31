@@ -22,11 +22,11 @@ export async function refreshToken(token: any) {
 
     const decodedAccess: any = jwtDecode(data.access);
 
-    console.log("Token refreshed");
+    // console.log("Token refreshed");
 
     return {
       ...token,
-      accessToken: data.access,
+      accessToken: data.accessToken || data.access,
       accessTokenExpires:
         (decodedAccess?.exp ?? Math.floor(Date.now() / 1000) + 3600) * 1000, // fallback 1 hour
       refreshToken: data.refresh || token.refreshToken, // optional: use new refresh token if provided
@@ -40,25 +40,18 @@ export async function refreshToken(token: any) {
   }
 }
 
-export const authConfig: NextAuthConfig = {
+export const authConfig = {
   pages: {
     signIn: "/auth/token/",
   },
   callbacks: {
-    async jwt({
-      token,
-      user,
-      account,
-    }: {
-      token: any;
-      user?: any;
-      account?: any;
-    }) {
+    async jwt({ token, user }: { token: any; user?: any }) {
       if (user) {
-        token.accessToken = user.access;
+        token.accessToken = user.accessToken;
         token.accessTokenExpires = user.accessTokenExpires;
-        token.refreshToken = user.refresh;
+        token.refreshToken = user.refreshToken;
         token.email = user.email;
+        token.username = user.username;
         return token;
       }
 
@@ -73,11 +66,15 @@ export const authConfig: NextAuthConfig = {
     },
 
     async session({ session, token }: { session: Session; token: any }) {
-      session.refreshToken = token.refreshToken;
+      session.user = {
+        ...session.user,
+        username: token.username,
+        email: token.email,
+      };
       session.accessToken = token.accessToken;
+      session.refreshToken = token.accessToken;
       session.error = token.error;
       session.expires = new Date(token.accessTokenExpires).toISOString();
-      console.log(session);
 
       return session;
     },

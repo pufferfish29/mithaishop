@@ -49,29 +49,40 @@
 
 // export default ViewProducts;
 
-'use client';
+"use client";
 
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import { Eye, Pencil, Plus } from 'lucide-react';
-import Image from 'next/image';
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
-import { useGetAllProducts } from '@/hooks/productQueries';
-import Loading from '@/components/loading';
-import { MdDelete } from 'react-icons/md';
-import { deleteProductById } from '@/apicalls/dashboard/product';
-import toast from 'react-hot-toast';
-import Alert from '@/components/dashboard/Alert';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Eye, Pencil, Plus } from "lucide-react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useGetAllProducts } from "@/hooks/productQueries";
+import Loading from "@/components/loading";
+import { MdDelete } from "react-icons/md";
+// import { deleteProductById } from '@/apicalls/dashboard/product';
+// import toast from 'react-hot-toast';
+import Alert from "@/components/dashboard/Alert";
 
-const ViewProducts = () => {
+const ViewProducts = ({ token }: { token: string | undefined }) => {
   const router = useRouter();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [deleting, setDeleting] = useState(false);
   const [productId, setProductId] = useState(-1);
 
-  const { data: products, isLoading, isPending } = useGetAllProducts('abc', page, limit);
+  const {
+    data: products,
+    isLoading,
+    isPending,
+  } = useGetAllProducts(token, page, limit);
 
   if (isLoading) {
     return <Loading />;
@@ -79,14 +90,25 @@ const ViewProducts = () => {
 
   return (
     <div>
-      {deleting && <Alert deleting={deleting} url={`/product/${productId}`} name="product" setDelete={setDeleting} setId={setProductId} />}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="font-bold text-orange-900 text-4xl">Products</h1>
-        <Button onClick={() => router.push('/dashboard/products/add')} className="bg-orange-500 hover:bg-orange-600 text-white">
+      {deleting && (
+        <Alert
+          deleting={deleting}
+          url={`/product/${productId}`}
+          name='product'
+          setDelete={setDeleting}
+          setId={setProductId}
+        />
+      )}
+      <div className='flex justify-between items-center mb-6'>
+        <h1 className='font-bold text-orange-900 text-4xl'>Products</h1>
+        <Button
+          onClick={() => router.push("/dashboard/products/add")}
+          className='bg-orange-500 hover:bg-orange-600 text-white'
+        >
           <Plus /> Add New Product
         </Button>
       </div>
-      <Table className="bg-white rounded-2xl">
+      <Table className='bg-white rounded-2xl'>
         <TableHeader>
           <TableRow>
             <TableHead>S.N</TableHead>
@@ -101,7 +123,7 @@ const ViewProducts = () => {
         <TableBody>
           {products && products?.items.length > 0 ? (
             products?.items.map((product, idx) => (
-              <TableRow key={product.id} className="hover:bg-orange-50">
+              <TableRow key={product.id} className='hover:bg-orange-50'>
                 <TableCell>{idx + 1}</TableCell>
                 {/* <TableCell>
                   <Image src={product.image} alt={product.description} width={50} height={50} className="rounded-lg object-cover" />
@@ -110,15 +132,15 @@ const ViewProducts = () => {
                 <TableCell>{product?.pricePerKG}</TableCell>
                 <TableCell>{product?.unitPrice}</TableCell>
                 <TableCell>
-                  <div className="flex items-center gap-4">
-                    <Eye className="cursor-pointer  w-9 hover:bg-orange-400 hover:text-white hover:border-orange-400 shadow-md h-9 border border-black px-2 rounded-sm" />
-                    <Pencil className="cursor-pointer  w-9 hover:bg-green-400 hover:text-white hover:border-green-400 shadow-md h-9 border border-black px-2 rounded-sm" />
+                  <div className='flex items-center gap-4'>
+                    <Eye className='cursor-pointer  w-9 hover:bg-orange-400 hover:text-white hover:border-orange-400 shadow-md h-9 border border-black px-2 rounded-sm' />
+                    <Pencil className='cursor-pointer  w-9 hover:bg-green-400 hover:text-white hover:border-green-400 shadow-md h-9 border border-black px-2 rounded-sm' />
                     <MdDelete
                       onClick={() => {
                         setProductId(product.id);
                         setDeleting(true);
                       }}
-                      className="cursor-pointer  w-9 h-9 border border-black px-2 rounded-sm  hover:bg-red-400 hover:text-white hover:border-white"
+                      className='cursor-pointer  w-9 h-9 border border-black px-2 rounded-sm  hover:bg-red-400 hover:text-white hover:border-white'
                     />
                   </div>
                 </TableCell>
@@ -126,7 +148,7 @@ const ViewProducts = () => {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={5} className="text-center">
+              <TableCell colSpan={5} className='text-center'>
                 No products found.
               </TableCell>
             </TableRow>

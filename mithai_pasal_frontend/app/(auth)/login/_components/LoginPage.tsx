@@ -18,6 +18,9 @@ import Link from "next/link";
 import { GiWrappedSweet } from "react-icons/gi";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
+import { authenticate } from "@/apicalls/auth/action";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 const loginSchema = z.object({
   email: z.string().min(1, "Enter at least one character"),
@@ -26,6 +29,7 @@ const loginSchema = z.object({
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -35,25 +39,17 @@ const Login = () => {
     },
   });
 
-  const {
-    handleSubmit,
-    control,
-    setError,
-    formState: { errors },
-  } = form;
+  const { setError } = form;
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
-      const res = await axios.post(
-        "http://localhost:3000/api/auth/signin",
-        {
-          email: data.email,
-          password: data.password,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("Login successful", res.data);
+      console.log(data);
+      const res = await authenticate(data);
+      if (!res.error) {
+        toast.success("Login successful");
+        router.push("/dashboard/sales");
+      } else {
+        toast.error("Invalid credentials");
+      }
     } catch (err: any) {
       if (axios.isAxiosError(err)) {
         const field = err.response?.data?.field || "email";

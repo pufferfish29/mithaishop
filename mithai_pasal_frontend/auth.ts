@@ -14,16 +14,15 @@ async function loginWithEmailAndPassword(email: string, password: string) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    console.log(res);
+
     if (!res.ok) {
       throw new Error("Invalid email or password");
     }
 
     const data: LoginResponseData = await res.json();
-    console.log(data);
     return data as LoginResponseData;
   } catch (error: any) {
-    console.error("Login error:", error);
+    // console.error("Login error:", error);
     throw new Error("Something went wrong during login");
   }
 }
@@ -37,20 +36,22 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         const parsedCredentials = z
           .object({ email: z.string(), password: z.string().min(6) })
           .safeParse(credentials);
-        console.log(credentials);
 
         if (!parsedCredentials.success) throw new Error("Invalid Credentials");
+
+        console.log("Parsed Credentials: ", parsedCredentials);
 
         const { email, password } = parsedCredentials.data;
 
         const res = await loginWithEmailAndPassword(email, password);
+        // console.log("Response: ", res);
         if (!res) throw new Error("Invalid Credentials");
 
-        const decodedAccess = jwtDecode(res.access);
+        const decodedAccess = jwtDecode(res.accessToken);
         const userData = {
           ...res,
-          accessToken: res.access,
-          refreshToken: res.refresh,
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
           email,
           accessTokenExpires:
             (decodedAccess?.exp ??

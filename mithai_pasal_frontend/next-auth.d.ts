@@ -8,6 +8,7 @@ declare module "next-auth" {
     refreshToken?: string;
     error?: string;
     user: {
+      username: string;
       email: string;
     } & DefaultSession["user"];
   }
@@ -23,6 +24,7 @@ declare module "next-auth" {
     accessTokenExpires: number;
     refreshToken: string;
     email: string;
+    username: string;
     error?: string;
   }
 }

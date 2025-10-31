@@ -1,17 +1,17 @@
 "use server";
 
 import { signIn, signOut } from "@/auth";
-import { TLogin } from "@/schemas/authSchema";
+// import { TLogin } from "@/schemas/authSchema";
+import { LoginInterface } from "@/types/User";
 import { AuthError } from "next-auth";
 
-export async function authenticate(formData: TLogin) {
+export async function authenticate(formData: LoginInterface) {
   try {
     const data = await signIn("credentials", {
-      ...formData,
+      email: formData.email,
+      password: formData.password,
       redirect: false,
     });
-
-    console.log(data);
 
     if (data && data.error) {
       throw new Error(data.error);
@@ -19,7 +19,6 @@ export async function authenticate(formData: TLogin) {
 
     return data;
   } catch (error) {
-    console.log(error);
     if (error instanceof AuthError) {
       switch (error.type) {
         case "CredentialsSignin":
@@ -35,6 +34,7 @@ export async function authenticate(formData: TLogin) {
 export async function logoutUser() {
   try {
     const data = await signOut();
+
     return data;
   } catch (error) {
     return "Something went wrong";
