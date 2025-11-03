@@ -1,0 +1,21 @@
+### create Sale
+POST {{baseUrl}}/api/sale
+Content-Type: application/json
+
+{
+  "productId": 1,
+  "quantity": 2,
+  "totalAmount": 500
+}
+
+### total sales for last 7 days
+GET {{baseUrl}}/api/sale?day=1day
+
+### total sales for last 1 week 
+GET {{baseUrl}}/api/sale?day=1week
+
+### total sales for last 1 month
+GET {{baseUrl}}/api/sale?day=1month
+
+### total sales for last 3 months
+GET {{baseUrl}}/api/sale?day=3month

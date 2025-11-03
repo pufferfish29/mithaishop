@@ -1,9 +1,9 @@
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import type { MigrationInterface, QueryRunner } from "typeorm";
 
 export class AlterColumnAddConstraintUnique1760167614780
   implements MigrationInterface
 {
-  name = 'AlterColumnAddConstraintUnique1760167614780';
+  name = "AlterColumnAddConstraintUnique1760167614780";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
