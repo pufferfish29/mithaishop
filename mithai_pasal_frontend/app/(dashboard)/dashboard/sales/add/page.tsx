@@ -1,10 +1,10 @@
 import React from "react";
-import UserAddForm from "./_components/UserAddForm";
+import AddSalesForm from "./_components/AddSalesForm";
 
 const page = () => {
   return (
     <div>
-      <UserAddForm />
+      <AddSalesForm />
     </div>
   );
 };
