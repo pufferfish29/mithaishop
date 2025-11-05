@@ -25,6 +25,6 @@ export class Sale {
   @Column({ name: "total_amount", type: "float", nullable: false })
   totalAmount: number;
 
-  @CreateDateColumn({ name: "created_at" })
+  @CreateDateColumn({ name: "created_at", type: "timestamptz" })
   createdAt: Date;
 }
