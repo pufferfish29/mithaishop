@@ -1,8 +1,8 @@
-'use server';
+"use server";
 
-import axiosInstance from '@/lib/axios/interceptor';
-import { baseUrl } from '@/lib/baseUrl';
-import { productType } from '@/types/Product';
+import axiosInstance from "@/lib/axios/interceptor";
+import { baseUrl } from "@/lib/baseUrl";
+import { productType } from "@/types/Product";
 
 export const addProduct = async (data: productType) => {
   try {
@@ -19,7 +19,8 @@ export const addProduct = async (data: productType) => {
       var: response?.data,
     };
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
     console.log(errorMessage);
   }
 };
@@ -27,9 +28,9 @@ export const addProduct = async (data: productType) => {
 export const deleteProductById = async (id: string) => {
   try {
     const response = await fetch(`${baseUrl}/product/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
     if (response.status !== 200) {
@@ -42,7 +43,8 @@ export const deleteProductById = async (id: string) => {
       status: response.status,
     };
   } catch (error: unknown) {
-    const errorMessage = error instanceof Error ? error.message : 'Internal server error';
+    const errorMessage =
+      error instanceof Error ? error.message : "Internal server error";
     console.log(errorMessage);
   }
 };

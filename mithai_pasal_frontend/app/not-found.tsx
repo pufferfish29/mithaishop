@@ -15,7 +15,7 @@ export default function NotFound() {
       <h1 className='text-6xl font-bold mb-4'>404</h1>
       <h2 className='text-3xl font-semibold mb-4'>Oops! Page Not Found</h2>
       <p className='text-lg mb-6 text-center max-w-md'>
-        Looks like the page you’re searching for is hiding somewhere in the
+        Looks like the page you're searching for is hiding somewhere in the
         sweet shop!
       </p>
 

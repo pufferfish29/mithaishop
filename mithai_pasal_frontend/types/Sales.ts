@@ -3,3 +3,22 @@ export type SalesDataResponse = {
   quantity: number;
   totalAmount: number;
 };
+
+export interface SalesClientResponse {
+  from: string;
+  to: string;
+  days: String[];
+  series: SalesClientResponse[];
+}
+
+export interface SalesSeriesResponse {
+  productId: number;
+  productName: number;
+  data: SalesSeriesDataResponse[];
+}
+
+export interface SalesSeriesDataResponse {
+  date: string;
+  quantity: number;
+  amount: number;
+}

@@ -1,7 +1,7 @@
 import React from "react";
 import AddSalesForm from "./_components/AddSalesForm";
 
-const page = () => {
+const page = async () => {
   return (
     <div>
       <AddSalesForm />
