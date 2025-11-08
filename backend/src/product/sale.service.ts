@@ -35,19 +35,59 @@ export class SaleService {
         "Invalid 'day' query. Use like 7day, 1week, 1month, 3month",
       );
     }
+
     const n = parseInt(match[1], 10);
     const unit = match[2] as "day" | "week" | "month";
 
     const now = new Date();
-    const startOfYear = new Date(now.getFullYear(), 0, 1);
 
-    let from = new Date(now);
-    if (unit === "day") from.setDate(now.getDate() - (n - 1));
-    if (unit === "week") from.setDate(now.getDate() - (n * 7 - 1));
-    if (unit === "month")
-      from = new Date(now.getFullYear(), now.getMonth() - (n - 1), 1);
+    let fromUTC: Date;
+    if (unit === "day") {
+      fromUTC = new Date(
+        Date.UTC(
+          now.getUTCFullYear(),
+          now.getUTCMonth(),
+          now.getUTCDate() - (n - 1),
+          ...[0, 0, 0, 0],
+        ),
+      );
+    } else if (unit === "week") {
+      fromUTC = new Date(
+        Date.UTC(
+          now.getUTCFullYear(),
+          now.getUTCMonth(),
+          now.getUTCDate() - (n * 7 - 1),
+          0,
+          0,
+          0,
+          0,
+        ),
+      );
+    } else {
+      fromUTC = new Date(
+        Date.UTC(
+          now.getUTCFullYear(),
+          now.getUTCMonth() - (n - 1),
+          1,
+          0,
+          0,
+          0,
+          0,
+        ),
+      );
+    }
 
-    if (from < startOfYear) from = startOfYear;
+    const toUTC = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        23,
+        59,
+        59,
+        999,
+      ),
+    );
 
     const rows: SaleAggregateRow[] = await this.saleRepo
       .createQueryBuilder("s")
@@ -55,20 +95,23 @@ export class SaleService {
       .select([
         "p.id as product_id",
         "p.name as product_name",
-        "DATE_TRUNC('day', s.created_at) as bucket",
+        "DATE_TRUNC('day', s.created_at AT TIME ZONE 'UTC') as bucket",
         "SUM(s.quantity) as total_qty",
         "SUM(s.total_amount) as total_amount",
       ])
-      .where("s.created_at >= :from AND s.created_at <= :to", { from, to: now })
+      .where("s.created_at BETWEEN :from AND :to", {
+        from: fromUTC.toISOString(),
+        to: toUTC.toISOString(),
+      })
       .groupBy("p.id, p.name, bucket")
       .orderBy("bucket", "ASC")
       .getRawMany<SaleAggregateRow>();
 
     const days: string[] = [];
-    const cursor = new Date(from);
-    while (cursor <= now) {
+    const cursor = new Date(fromUTC);
+    while (cursor <= toUTC) {
       days.push(cursor.toISOString().slice(0, 10));
-      cursor.setDate(cursor.getDate() + 1);
+      cursor.setUTCDate(cursor.getUTCDate() + 1);
     }
 
     const byProduct: Record<
@@ -95,6 +138,11 @@ export class SaleService {
       })),
     }));
 
-    return { from: from.toISOString(), to: now.toISOString(), days, series };
+    return {
+      from: fromUTC.toISOString(),
+      to: toUTC.toISOString(),
+      days,
+      series,
+    };
   }
 }
