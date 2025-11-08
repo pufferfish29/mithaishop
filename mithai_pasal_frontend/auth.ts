@@ -42,7 +42,7 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         const { email, password } = parsedCredentials.data;
 
         const res = await loginWithEmailAndPassword(email, password);
-        console.log("Response: ", res);
+        // console.log("Response: ", res);
         if (!res) throw new Error("Invalid Credentials");
 
         const decodedAccess = jwtDecode(res.accessToken);

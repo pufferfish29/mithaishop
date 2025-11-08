@@ -15,6 +15,7 @@ export const addSales = async (data: SalesDataResponse) => {
         var: response?.data,
       };
     }
+    console.log(response);
 
     return {
       status: response.status,

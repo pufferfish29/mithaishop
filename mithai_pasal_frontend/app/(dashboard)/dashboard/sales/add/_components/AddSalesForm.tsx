@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,8 +18,16 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { IoChevronBack } from "react-icons/io5";
 import { addSales } from "@/apicalls/dashboard/sales"; // You’ll create this API call similar to addUser
+import { useSession } from "next-auth/react";
+import { useGetAllProducts } from "@/hooks/productQueries";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-// ✅ Validation Schema
 const SalesSchema = z.object({
   productId: z.number().min(1, "Product ID is required"),
   quantity: z.number().min(1, "Quantity must be at least 1"),
@@ -30,13 +38,22 @@ type SalesForm = z.infer<typeof SalesSchema>;
 
 const AddSalesForm = () => {
   const router = useRouter();
+  const { data: session } = useSession();
+  const [limit, setLimit] = useState(1);
+  const [pageParams, setPageParams] = useState(1);
+
+  const { data: products } = useGetAllProducts(
+    session?.accessToken,
+    pageParams,
+    limit
+  );
 
   const form = useForm<SalesForm>({
     resolver: zodResolver(SalesSchema),
     defaultValues: {
       productId: 0,
-      quantity: 1,
-      totalAmount: 0,
+      quantity: undefined,
+      totalAmount: undefined,
     },
   });
 
@@ -81,12 +98,30 @@ const AddSalesForm = () => {
               <FormItem>
                 <FormLabel>Product ID</FormLabel>
                 <FormControl>
-                  <Input
-                    type='number'
-                    {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    placeholder='Enter product ID'
-                  />
+                  <Select
+                    onValueChange={(value) => field.onChange(Number(value))}
+                    value={field.value ? String(field.value) : ""}
+                  >
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder='Select a product' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {products && products.items.length > 0 ? (
+                        products?.items?.map((item) => (
+                          <SelectItem
+                            defaultValue={products?.items[0].id}
+                            value={String(item.id)}
+                            key={item.id}
+                          >
+                            {item.name.charAt(0).toUpperCase() +
+                              item.name.slice(1)}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value='0'>No Products Available</SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>

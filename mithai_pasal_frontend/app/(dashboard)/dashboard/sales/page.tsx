@@ -2,7 +2,7 @@ import React from "react";
 import Sales from "./_components/Sales";
 import Graph from "./_components/Graph";
 import HighestSales from "./_components/HighestSales";
-import { Button } from "@/components/ui/button";
+
 import Link from "next/link";
 
 const page = () => {
