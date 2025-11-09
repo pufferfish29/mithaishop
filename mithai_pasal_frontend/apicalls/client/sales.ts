@@ -9,7 +9,7 @@ export const getDailySales = async (
 ) => {
   try {
     const response = await GetRequest(
-      `${baseUrl}/sales?day=${day}day`,
+      `${baseUrl}/sale?day=${day}day`,
       {},
       {
         headers: {
@@ -26,13 +26,13 @@ export const getDailySales = async (
 };
 
 export const getWeeklySales = async (
-  day = 1,
+  week = 1,
   limit = 10,
   token: string | undefined
 ) => {
   try {
     const response = await GetRequest(
-      `${baseUrl}/sales?day=${day}week`,
+      `${baseUrl}/sale?day=${week}week`,
       {},
       {
         headers: {
@@ -48,14 +48,14 @@ export const getWeeklySales = async (
   }
 };
 
-export const getmonthlySales = async (
+export const getMonthlySales = async (
   month = 1,
   limit = 10,
   token: string | undefined
 ) => {
   try {
     const response = await GetRequest(
-      `${baseUrl}/sales?day=${month}month`,
+      `${baseUrl}/sale?day=${month}month`,
       {},
       {
         headers: {
@@ -78,7 +78,7 @@ export const getThreeMonthSales = async (
 ) => {
   try {
     const response = await GetRequest(
-      `${baseUrl}/sales?day=${month}month`,
+      `${baseUrl}/sale?day=${month}month`,
       {},
       {
         headers: {

@@ -8,7 +8,7 @@ export interface SalesClientResponse {
   from: string;
   to: string;
   days: String[];
-  series: SalesClientResponse[];
+  series: SalesSeriesResponse[];
 }
 
 export interface SalesSeriesResponse {
