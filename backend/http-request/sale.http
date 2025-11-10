@@ -18,4 +18,4 @@ GET {{baseUrl}}/api/sale?day=1week
 GET {{baseUrl}}/api/sale?day=1month
 
 ### total sales for last 3 months
-GET {{baseUrl}}/api/sale?day=3month
+GET {{baseUrl}}/api/sale?day=3day

@@ -34,6 +34,12 @@ export class ProductController {
     return this.productService.findOne(isNaN(parsedId) ? idOrName : parsedId);
   }
 
+  @Get("/top/sales")
+  @Public()
+  topSales(@Query("day") day: string, @Query("limit") limit?: number) {
+    return this.productService.topSales(day, Number(limit) || 10);
+  }
+
   @Delete(":id")
   @Public()
   remove(@Param("id") id: string) {

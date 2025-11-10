@@ -19,3 +19,6 @@ GET {{baseUrl}}/api/product/laddu
 
 ### Delete Product by ID
 DELETE {{baseUrl}}/api/product/1
+
+### top sales
+GET {{baseUrl}}/api/product/top/sales?day=2day
