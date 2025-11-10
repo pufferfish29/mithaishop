@@ -1,11 +1,12 @@
-import { Module } from '@nestjs/common';
+import { Module } from "@nestjs/common";
 import {
   JWTAccesssTokenProvider,
   JWTRefreshTokenProvider,
-} from './providers/jwt-token.provider';
+} from "./providers/jwt-token.provider";
+import { MailerService } from "./providers/mail.provider";
 
 @Module({
-  providers: [JWTAccesssTokenProvider, JWTRefreshTokenProvider],
-  exports: [JWTAccesssTokenProvider, JWTRefreshTokenProvider],
+  providers: [JWTAccesssTokenProvider, JWTRefreshTokenProvider, MailerService],
+  exports: [JWTAccesssTokenProvider, JWTRefreshTokenProvider, MailerService],
 })
 export class CommonModule {}

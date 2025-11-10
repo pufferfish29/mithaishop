@@ -18,6 +18,8 @@ import { JwtService } from "@nestjs/jwt";
 import { BAD_COOKIE, INVALID_CREDENTIALS } from "./constants/constants";
 import { RedisService } from "src/redis/redis.service";
 import ms from "ms";
+import { randomBytes } from "crypto";
+import { MailerService } from "src/common/providers/mail.provider";
 
 import type { TError } from "./types/error.types";
 import type { TPayload, TUser } from "./types/auth.type";
@@ -27,6 +29,7 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly redisService: RedisService,
+    private readonly mailer: MailerService,
     @Inject(ACCESS_TOKEN_PROVDER)
     private readonly accessTokenProvider: JwtService,
     @Inject(REFRESH_TOKEN_PROVDER)
@@ -114,5 +117,50 @@ export class AuthService {
     }
 
     return this.generateTokensAndStore(user);
+  }
+
+  async requestPasswordReset(email: string) {
+    const user = await this.userService.findOne({ email });
+    if (!user) throw new UnauthorizedException("user not found");
+
+    const token = randomBytes(32).toString("hex");
+    const key = `resetpwd:${user.id}`;
+    await this.redisService.set(key, token, ms("15m"));
+
+    const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+    const resetUrl = `${frontendUrl}/reset-password?uid=${user.id}&token=${token}`;
+
+    const subject = "Password Reset Request";
+    const html = `
+      <p>Hello ${user.email.split("@")[0]},</p>
+      <p>We received a request to reset your password. Click the link below to set a new password. This link will expire in 15 minutes.</p>
+      <p><a href="${resetUrl}">Reset your password</a></p>
+      <p>If you did not request this, you can safely ignore this email.</p>
+      <p>Thanks,<br/>Support Team</p>
+    `;
+
+    const res = await this.mailer.send({ to: user.email, subject, html });
+    console.log(res, "*****");
+    return { success: true };
+  }
+
+  async resetPassword(userId: number, token: string, newPassword: string) {
+    const key = `resetpwd:${userId}`;
+    const stored = await this.redisService.get(key);
+    if (!stored || stored !== token) {
+      throw new UnauthorizedException({ message: "invalid or expired token" });
+    }
+
+    const user = await this.userService.unsafeFindOne({ id: userId });
+    if (!user) throw new NotFoundException("user not found");
+
+    const salt = await genSalt();
+    const hashed = await hash(newPassword, salt);
+
+    await this.userService.updatePassword(userId, hashed);
+
+    await this.redisService.del(key);
+
+    return { success: true };
   }
 }

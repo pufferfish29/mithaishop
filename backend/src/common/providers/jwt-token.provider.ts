@@ -1,8 +1,8 @@
-import { Provider } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { Provider } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
 
-export const ACCESS_TOKEN_PROVDER = 'ACCESS_TOKEN_PROVIDER';
-export const REFRESH_TOKEN_PROVDER = 'REFRESH_TOKEN_PROVIDER';
+export const ACCESS_TOKEN_PROVDER = "ACCESS_TOKEN_PROVIDER";
+export const REFRESH_TOKEN_PROVDER = "REFRESH_TOKEN_PROVIDER";
 
 export const JWTAccesssTokenProvider: Provider = {
   provide: ACCESS_TOKEN_PROVDER,

@@ -11,6 +11,13 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
+  updatePassword(userId: number, hashedPassword: string) {
+    return this.userRepository.update(
+      { id: userId },
+      { password: hashedPassword },
+    );
+  }
+
   async create(@Body() createUserDto: CreateUserDto) {
     const userPromise = this.userRepository.create(createUserDto);
     const { username, email, id, role } =

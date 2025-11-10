@@ -7,6 +7,7 @@ import type { Request, Response } from "express";
 import { TCookieObj } from "./types/cookie.type";
 import { TPayload } from "./types/auth.type";
 import ms from "ms";
+import { ForgotPasswordDto, ResetPasswordDto } from "./dto/reset-password.dto";
 
 @Controller("auth")
 export class AuthController {
@@ -49,6 +50,19 @@ export class AuthController {
   async findOne(@Param() findUserDto: FindUserDto) {
     const user = await this.authService.findOne(findUserDto);
     return user;
+  }
+
+  @Public()
+  @Post("forgot-password")
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.requestPasswordReset(dto.email);
+  }
+
+  @Public()
+  @Post("reset-password")
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    const { userId, token, newPassword } = dto;
+    return this.authService.resetPassword(userId, token, newPassword);
   }
 
   @Refresh()
