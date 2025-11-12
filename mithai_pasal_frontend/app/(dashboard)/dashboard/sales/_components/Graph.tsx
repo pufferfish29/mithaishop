@@ -65,9 +65,9 @@ const Graph = () => {
   return (
     <Card className='bg-orange-200  w-[75%] shadow-none'>
       <CardHeader>
-        <CardTitle>Area Chart</CardTitle>
+        <CardTitle>Sales Chart</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 days
+          Showing graph of the sales for the last 7 days
         </CardDescription>
       </CardHeader>
       <CardContent>

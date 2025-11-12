@@ -22,3 +22,10 @@ export interface SalesSeriesDataResponse {
   quantity: number;
   amount: number;
 }
+
+export interface TopSellingProductResponse {
+  productId: number;
+  productName: string;
+  totalQuantity: number;
+  totalAmount: number;
+}

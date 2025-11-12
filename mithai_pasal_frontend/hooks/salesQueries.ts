@@ -3,6 +3,7 @@ import {
   getMonthlySales,
   getThreeMonthSales,
   getWeeklySales,
+  topSellingProducts,
 } from "@/apicalls/client/sales";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
@@ -75,6 +76,26 @@ export const useGetThreeMonthlySales = (
   const { data, isLoading, isPending } = useQuery({
     queryKey: ["salesThreeMonth", pageParams, limit],
     queryFn: () => getThreeMonthSales(month, limit, token),
+    placeholderData: keepPreviousData,
+    enabled: !!token,
+  });
+
+  return {
+    data,
+    isLoading,
+    isPending,
+  };
+};
+
+export const useGetTopSellingProducts = (
+  token: string | undefined,
+  pageParams: number,
+  limit: number,
+  day: number
+) => {
+  const { data, isLoading, isPending } = useQuery({
+    queryKey: ["topSales", pageParams, limit],
+    queryFn: () => topSellingProducts(day, limit, token),
     placeholderData: keepPreviousData,
     enabled: !!token,
   });
