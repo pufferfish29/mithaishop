@@ -139,8 +139,7 @@ export class AuthService {
       <p>Thanks,<br/>Support Team</p>
     `;
 
-    const res = await this.mailer.send({ to: user.email, subject, html });
-    console.log(res, "*****");
+    await this.mailer.send({ to: user.email, subject, html });
     return { success: true };
   }
 
