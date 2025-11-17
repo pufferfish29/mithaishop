@@ -1,6 +1,6 @@
 import { GetRequest } from "@/lib/axios/axios";
 import { baseUrl } from "@/lib/baseUrl";
-import { SalesClientResponse } from "@/types/Sales";
+import { SalesClientResponse, TopSellingProductResponse } from "@/types/Sales";
 
 export const getDailySales = async (
   day = 1,
@@ -89,6 +89,29 @@ export const getThreeMonthSales = async (
     );
 
     return response.data as SalesClientResponse;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const topSellingProducts = async (
+  day = 1,
+  limit = 10,
+  token: string | undefined
+) => {
+  try {
+    const response = await GetRequest(
+      `${baseUrl}/product/top/sales?day=${day}day`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data as TopSellingProductResponse[];
   } catch (error) {
     throw error;
   }
