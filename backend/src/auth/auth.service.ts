@@ -6,20 +6,20 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { UserService } from "src/user/user.service";
+import { UserService } from "../user/user.service";
 import { compare, genSalt, hash } from "bcryptjs";
 import { FindUserDto } from "./dto/find-user.dto";
 import { SigninUserDto, SignupUserDto } from "./dto/create-auth.dto";
 import {
   ACCESS_TOKEN_PROVDER,
   REFRESH_TOKEN_PROVDER,
-} from "src/common/providers/jwt-token.provider";
+} from "../common/providers/jwt-token.provider";
 import { JwtService } from "@nestjs/jwt";
 import { BAD_COOKIE, INVALID_CREDENTIALS } from "./constants/constants";
-import { RedisService } from "src/redis/redis.service";
+import { RedisService } from "../redis/redis.service";
 import ms from "ms";
 import { randomBytes } from "crypto";
-import { MailerService } from "src/common/providers/mail.provider";
+import { MailerService } from "../common/providers/mail.provider";
 
 import type { TError } from "./types/error.types";
 import type { TPayload, TUser } from "./types/auth.type";
