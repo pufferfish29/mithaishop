@@ -139,7 +139,14 @@ export class AuthService {
       <p>Thanks,<br/>Support Team</p>
     `;
 
-    await this.mailer.send({ to: user.email, subject, html });
+    try {
+      await this.mailer.send({ to: user.email, subject, html });
+    } catch (error) {
+      // Don't fail the whole request if email sending fails. Log for debugging.
+      // eslint-disable-next-line no-console
+      console.error("requestPasswordReset: failed to send email", error);
+    }
+
     return { success: true };
   }
 

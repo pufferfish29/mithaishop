@@ -1,27 +1,41 @@
 import { Injectable } from "@nestjs/common";
-import { Resend } from "resend";
+import * as nodemailer from "nodemailer";
 
 @Injectable()
 export class MailerService {
-  private resend: Resend;
-  private fromEmail: string;
-  private fromName: string;
+  private transporter: nodemailer.Transporter;
 
   constructor() {
-    this.resend = new Resend(process.env.RESEND_API_KEY);
+    this.transporter = nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: process.env.SMTP_PORT === "465",
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
   }
 
-  async send(options: { to: string; subject: string; html: string }) {
+  async send(options: {
+    to: string;
+    subject: string;
+    html: string;
+  }): Promise<nodemailer.SentMessageInfo> {
+    console.log("*********************9")
+
     try {
-      const response = this.resend.emails.send({
-        from: process.env.RESEND_FROM_USER,
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const response = await this.transporter.sendMail({
+        from: `"${process.env.SMTP_FROM_NAME}" <${process.env.SMTP_FROM_EMAIL}>`,
         to: options.to,
         subject: options.subject,
         html: options.html,
       });
-      return response;
+      console.log("*********************10")
+      return response as unknown as nodemailer.SentMessageInfo;
     } catch (error) {
-      console.error("Error sending email via Resend:", error);
+      console.error("Error sending email via Nodemailer:", error);
       throw error;
     }
   }
