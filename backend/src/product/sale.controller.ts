@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Query } from "@nestjs/common";
-import { Public } from "src/auth/decorators/auth-guard.decorator";
+import { Public } from "../auth/decorators/auth-guard.decorator";
 import { SaleService } from "./sale.service";
 import { CreateSaleDto } from "./dto/create-sale.dto";
 

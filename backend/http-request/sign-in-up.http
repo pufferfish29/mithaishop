@@ -4,9 +4,9 @@ POST {{baseUrl}}/api/auth/signup
 Content-Type: application/json
 
 {
-  "username": "apple",
+  "username": "mithai",
   "password": "Applefruit#12",
-  "email": "hifaji5477@wivstore.com"
+  "email": "mithaishop475@gmail.com"
 }
 
 
@@ -17,7 +17,7 @@ Content-Type: application/json
 
 {
   "password": "Applefruit#12",
-  "email": "hifaji5477@wivstore.com"
+  "email": "mithaishop475@gmail.com"
 }
 
 # @after

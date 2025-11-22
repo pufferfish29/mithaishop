@@ -10,7 +10,7 @@ import {
   IS_PUBLIC,
   IS_REFRESH_GUARD,
 } from '../decorators/auth-guard.decorator';
-import { REFRESH_TOKEN_PROVDER } from 'src/common/providers/jwt-token.provider';
+import { REFRESH_TOKEN_PROVDER } from '../../common/providers/jwt-token.provider';
 import { JwtService } from '@nestjs/jwt';
 import { TError } from '../types/error.types';
 import { BAD_COOKIE, MISSING_COOKIE } from '../constants/constants';

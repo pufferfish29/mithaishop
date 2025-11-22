@@ -11,9 +11,13 @@ declare global {
       POSTGRES_PASSWORD: string;
       POSTGRES_DB: string;
       POSTGRES_PORT: string;
+      POSTGRES_URL: string;
       REDIS_HOST: string;
       REDIS_PORT: string;
-      NODE_ENV: 'dev' | 'prod';
+      NODE_ENV: "dev" | "prod";
+      RESEND_API_KEY: string;
+      RESEND_FROM_USER: string;
+      REDIS_PASSWORD: string;
     }
   }
 }
