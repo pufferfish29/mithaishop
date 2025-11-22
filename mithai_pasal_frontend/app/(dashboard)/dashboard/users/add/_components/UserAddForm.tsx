@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { IoChevronBack } from "react-icons/io5";
 import { addUser } from "@/apicalls/dashboard/user";
+import { useSession } from "next-auth/react";
 
 const UserSchema = z
   .object({
@@ -35,6 +36,7 @@ type UserForm = z.infer<typeof UserSchema>;
 
 const UserAddForm = () => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const form = useForm<UserForm>({
     resolver: zodResolver(UserSchema),
@@ -48,16 +50,16 @@ const UserAddForm = () => {
 
   const onSubmit = async (data: UserForm) => {
     try {
-      //   if (data.password !== data.confirmPassword) {
-      //     return toast.error("Password do not match");
-      //   }
+      // if (data.password !== data.confirmPassword) {
+      //   return toast.error("Password do not match");
+      // }
 
       const payload = {
         username: data.username,
         email: data.email,
         password: data.password,
       };
-      const response = await addUser(payload);
+      const response = await addUser(payload, session?.accessToken as string);
 
       if (response && response?.status >= 200 && response?.status < 300) {
         toast.success("User added successfully");

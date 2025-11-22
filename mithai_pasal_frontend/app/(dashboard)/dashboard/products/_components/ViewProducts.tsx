@@ -98,15 +98,19 @@ const ViewProducts = ({ token }: { token: string | undefined }) => {
           setId={setProductId}
         />
       )}
-      <div className='flex justify-between items-center mb-6'>
-        <h1 className='font-bold text-orange-900 text-4xl'>Products</h1>
+      <div className='flex flex-col md:flex-row justify-between md:items-center gap-4 mb-6'>
+        <h1 className='font-bold text-orange-900 text-3xl md:text-4xl'>
+          Products
+        </h1>
+
         <Button
           onClick={() => router.push("/dashboard/products/add")}
-          className='bg-orange-500 hover:bg-orange-600 text-white'
+          className='bg-orange-500 hover:bg-orange-600 text-white w-full md:w-auto flex items-center justify-center gap-2'
         >
           <Plus /> Add New Product
         </Button>
       </div>
+
       <Table className='bg-white rounded-2xl'>
         <TableHeader>
           <TableRow>
@@ -115,7 +119,7 @@ const ViewProducts = ({ token }: { token: string | undefined }) => {
             <TableHead>Name</TableHead>
             <TableHead>Price per kg ($)</TableHead>
             <TableHead>Unit Price</TableHead>
-            <TableHead>Actions</TableHead>
+            {/* <TableHead>Actions</TableHead> */}
           </TableRow>
         </TableHeader>
 
@@ -130,7 +134,7 @@ const ViewProducts = ({ token }: { token: string | undefined }) => {
                 <TableCell>{product?.name}</TableCell>
                 <TableCell>{product?.pricePerKG}</TableCell>
                 <TableCell>{product?.unitPrice}</TableCell>
-                <TableCell>
+                {/* <TableCell>
                   <div className='flex items-center gap-4'>
                     <Eye className='cursor-pointer  w-9 hover:bg-orange-400 hover:text-white hover:border-orange-400 shadow-md h-9 border border-black px-2 rounded-sm' />
                     <Pencil className='cursor-pointer  w-9 hover:bg-green-400 hover:text-white hover:border-green-400 shadow-md h-9 border border-black px-2 rounded-sm' />
@@ -142,7 +146,7 @@ const ViewProducts = ({ token }: { token: string | undefined }) => {
                       className='cursor-pointer  w-9 h-9 border border-black px-2 rounded-sm  hover:bg-red-400 hover:text-white hover:border-white'
                     />
                   </div>
-                </TableCell>
+                </TableCell> */}
               </TableRow>
             ))
           ) : (

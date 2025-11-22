@@ -17,7 +17,7 @@ import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { LuLock } from "react-icons/lu";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { resetPasswordFunction } from "@/apicalls/auth/User";
 import toast from "react-hot-toast";
 
@@ -39,6 +39,7 @@ const ResetPassword = () => {
   const params = useSearchParams();
   const uid = params?.get("uid");
   const token = params?.get("token");
+  const router = useRouter();
 
   const form = useForm<ResetPasswordForm>({
     resolver: zodResolver(ResetPasswordSchema),
@@ -62,6 +63,7 @@ const ResetPassword = () => {
 
       if (status >= 200 && status <= 300) {
         toast.success("Your passsword has been changed successfully.");
+        router.push("/login");
       } else {
         toast.error("Failed to change password.");
       }

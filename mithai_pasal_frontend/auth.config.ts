@@ -78,7 +78,7 @@ export const authConfig = {
       session.refreshToken = token.refreshToken;
       session.error = token.error;
       session.expires = new Date(token.accessTokenExpires).toISOString();
-      // console.log("Session: ", session);
+      console.log("Session: ", session);
       return session;
     },
   },

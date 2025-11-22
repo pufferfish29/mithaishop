@@ -1,12 +1,9 @@
-import axiosInstance from "@/lib/axios/interceptor";
+"use server";
+
 import { baseUrl } from "@/lib/baseUrl";
 import { UserAddFormInterface } from "@/types/User";
-import { useSession } from "next-auth/react";
 
-export async function addUser(data: UserAddFormInterface) {
-  const { data: session } = useSession();
-  const acccess = session?.accessToken;
-
+export async function addUser(data: UserAddFormInterface, acccess: string) {
   if (!acccess) {
     throw new Error("Unauthorized");
   }
@@ -23,13 +20,6 @@ export async function addUser(data: UserAddFormInterface) {
 
     console.log(response);
     const val = await response.json();
-
-    // const response = await axiosInstance.post(
-    //   `${baseUrl}/auth/signup`,
-    //   { data },
-    //   { withCredentials: true }
-    // );
-    // const val = await response.data;
 
     if (response.ok) {
       return {

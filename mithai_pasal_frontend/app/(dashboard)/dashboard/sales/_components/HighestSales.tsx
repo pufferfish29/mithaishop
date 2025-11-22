@@ -11,7 +11,7 @@ const HighestSales = () => {
   const { data } = useGetTopSellingProducts(session?.accessToken, 1, 1, 1);
 
   return (
-    <div className='w-[25%] bg-orange-200  px-5 py-5 rounded-xl'>
+    <div className='w-[25%] max-lg:w-full bg-orange-200  px-5 py-5 rounded-xl '>
       <p className='text-orange-700 font-bold text-xl'>Top Selling Products</p>
       <div className='space-y-8 mt-10'>
         {data &&

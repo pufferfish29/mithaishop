@@ -45,6 +45,8 @@ const Graph = () => {
 
   const { data: weekly } = useGetWeekSales(session?.accessToken, 1, 1, 1);
 
+  console.log(weekly);
+
   const weeklyChartData = weekly
     ? weekly.series
         .map((w) =>
@@ -63,7 +65,7 @@ const Graph = () => {
     : chartData;
 
   return (
-    <Card className='bg-orange-200  w-[75%] shadow-none'>
+    <Card className='bg-orange-200  w-[75%] max-lg:w-full shadow-none'>
       <CardHeader>
         <CardTitle>Sales Chart</CardTitle>
         <CardDescription>

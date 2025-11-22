@@ -41,14 +41,14 @@ const Sales = () => {
 
   return (
     <div>
-      <div className='flex  gap-5 mt-6'>
-        <div className='bg-orange-200 px-10 py-8 w-1/2 space-y-2 rounded-xl '>
+      <div className='flex  gap-5 mt-6 max-lg:flex-col'>
+        <div className='bg-orange-200 px-10 py-8 w-1/2  max-lg:w-full space-y-2 rounded-xl '>
           <h1 className='text-orange-700'>Daily Sales</h1>
           <p className='font-bold text-orange-900 text-3xl'>${dailySales}</p>
           {/* <p className='text-green-500 font-bold'>+12.5% from yesterday</p> */}
         </div>
 
-        <div className='bg-orange-200 px-10 py-8 w-1/2 space-y-2 rounded-xl  '>
+        <div className='bg-orange-200 px-10 py-8 w-1/2 max-lg:w-full space-y-2 rounded-xl  '>
           <h1 className='text-orange-700'>Weekly Sales</h1>
           <p className='font-bold text-orange-900 text-3xl'>
             ${weeklySales ? weeklySales[0] : "12,450"}
@@ -56,7 +56,7 @@ const Sales = () => {
           {/* <p className='text-green-500 font-bold'>+5.2% from last week</p> */}
         </div>
 
-        <div className='bg-orange-200 px-10 py-8 w-1/2 space-y-2 rounded-xl  '>
+        <div className='bg-orange-200 px-10 py-8 w-1/2 max-lg:w-full space-y-2 rounded-xl  '>
           <h1 className='text-orange-700'>Monthly Sales</h1>
           <p className='font-bold text-orange-900 text-3xl'>
             ${monthlySales ? monthlySales[0] : "45,820.50"}

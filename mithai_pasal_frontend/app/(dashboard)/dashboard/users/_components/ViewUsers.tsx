@@ -38,7 +38,7 @@ const ViewUsers = () => {
           <TableHead>Name</TableHead>
           <TableHead>Email</TableHead>
           <TableHead className='text-right'>Role</TableHead>
-          <TableHead className='text-right'>Actions</TableHead>
+          <TableHead className='text-center'>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody className='px-10'>
@@ -52,7 +52,7 @@ const ViewUsers = () => {
                 {invoice.totalAmount}
               </TableCell>
               <TableCell>
-                <div className='flex items-center gap-4'>
+                <div className='flex items-center justify-center gap-4'>
                   <Eye className='cursor-pointer  w-9 hover:bg-orange-400 hover:text-white hover:border-orange-400 shadow-md h-9 border border-black px-2 rounded-sm' />
                   <Pencil className='cursor-pointer  w-9 hover:bg-green-400 hover:text-white hover:border-green-400 shadow-md h-9 border border-black px-2 rounded-sm' />
                   <MdDelete
