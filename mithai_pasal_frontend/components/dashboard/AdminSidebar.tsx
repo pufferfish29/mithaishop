@@ -26,6 +26,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import { logoutUser } from "@/apicalls/auth/action";
+import { useSession } from "next-auth/react";
 
 const items = [
   { title: "Sales Tracking", url: "/dashboard/sales", icon: LineChart },
@@ -57,6 +58,8 @@ const AdminSidebar = () => {
     }
   };
 
+  const { data: session } = useSession();
+
   return (
     <Sidebar>
       <div className='bg-[#fadcc3] h-screen flex flex-col justify-between'>
@@ -77,28 +80,39 @@ const AdminSidebar = () => {
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu className='mt-20'>
-                {items.map((item) => {
-                  const activeSidebar =
-                    item.url === "/dashboard"
-                      ? location === item.url
-                      : location.startsWith(item.url);
+                {items
+                  .filter((menu) => {
+                    if (
+                      menu.title === "Users" &&
+                      session?.user.role !== "admin"
+                    ) {
+                      return false;
+                    }
 
-                  return (
-                    <SidebarMenuItem key={item.title}>
-                      <SidebarMenuButton asChild>
-                        <Link
-                          className={`${
-                            activeSidebar && "bg-amber-600 text-white"
-                          }`}
-                          href={item.url}
-                        >
-                          <item.icon className='w-10 h-10' />
-                          <span className='text-[18px]'>{item.title}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })}
+                    return true;
+                  })
+                  .map((item) => {
+                    const activeSidebar =
+                      item.url === "/dashboard"
+                        ? location === item.url
+                        : location?.startsWith(item.url);
+
+                    return (
+                      <SidebarMenuItem key={item.title}>
+                        <SidebarMenuButton asChild>
+                          <Link
+                            className={`${
+                              activeSidebar && "bg-amber-600 text-white"
+                            }`}
+                            href={item.url}
+                          >
+                            <item.icon className='w-10 h-10' />
+                            <span className='text-[18px]'>{item.title}</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    );
+                  })}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

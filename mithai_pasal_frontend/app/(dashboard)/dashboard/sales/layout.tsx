@@ -3,5 +3,9 @@ export default function SalesLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="max-w-[1500px] mx-auto px-10 overflow-y-auto">{children}</div>;
+  return (
+    <div className='max-w-[1500px] mx-auto px-10 overflow-y-auto'>
+      {children}
+    </div>
+  );
 }

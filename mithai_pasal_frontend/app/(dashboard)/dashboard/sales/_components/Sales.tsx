@@ -44,16 +44,14 @@ const Sales = () => {
       <div className='flex  gap-5 mt-6'>
         <div className='bg-orange-200 px-10 py-8 w-1/2 space-y-2 rounded-xl '>
           <h1 className='text-orange-700'>Daily Sales</h1>
-          <p className='font-bold text-orange-900 text-3xl'>
-            ${dailySales.toString() === "0" ? 0 : dailySales}
-          </p>
+          <p className='font-bold text-orange-900 text-3xl'>${dailySales}</p>
           {/* <p className='text-green-500 font-bold'>+12.5% from yesterday</p> */}
         </div>
 
         <div className='bg-orange-200 px-10 py-8 w-1/2 space-y-2 rounded-xl  '>
           <h1 className='text-orange-700'>Weekly Sales</h1>
           <p className='font-bold text-orange-900 text-3xl'>
-            ${weeklySales[0].toString() === "0" ? 0 : weeklySales[0]}
+            ${weeklySales ? weeklySales[0] : "12,450"}
           </p>
           {/* <p className='text-green-500 font-bold'>+5.2% from last week</p> */}
         </div>
@@ -61,7 +59,7 @@ const Sales = () => {
         <div className='bg-orange-200 px-10 py-8 w-1/2 space-y-2 rounded-xl  '>
           <h1 className='text-orange-700'>Monthly Sales</h1>
           <p className='font-bold text-orange-900 text-3xl'>
-            ${monthlySales[0].toString() === "0" ? 0 : monthlySales[0]}
+            ${monthlySales ? monthlySales[0] : "45,820.50"}
           </p>
           {/* <p className='text-green-500 font-bold'>+8.1% from last month</p> */}
         </div>

@@ -1,6 +1,7 @@
 "use server";
 
 import { auth, signIn, signOut } from "@/auth";
+import axiosInstance from "@/lib/axios/interceptor";
 import { baseUrl } from "@/lib/baseUrl";
 import { LoginInterface } from "@/types/User";
 import { AuthError } from "next-auth";
@@ -58,6 +59,34 @@ export async function getMyDetails() {
     });
 
     const data = await response.json();
+
+    return {
+      status: response.status,
+      data,
+    };
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "An unexpected error occurred.";
+    return {
+      status: 500,
+      data: { message: errorMessage },
+    };
+  }
+}
+
+export async function sendResetPasswordEmail(email: string) {
+  try {
+    const response = await axiosInstance.post(
+      `${baseUrl}/auth/forgot-password`,
+      {
+        email,
+      },
+      { headers: { Authorization: "" } }
+    );
+
+    console.log(response);
+
+    const data = await response.data;
 
     return {
       status: response.status,
