@@ -12,15 +12,17 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { uuid, z } from "zod";
 import React, { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { LuLock } from "react-icons/lu";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { resetPasswordFunction } from "@/apicalls/auth/User";
+import toast from "react-hot-toast";
 
 const ResetPasswordSchema = z
   .object({
-    currentPassword: z.string().min(8, "Must be at least 8 characters"),
     newPassword: z.string().min(8, "Must be at least 8 characters"),
     confirmPassword: z.string().min(8, "Must be at least 8 characters"),
   })
@@ -32,21 +34,42 @@ const ResetPasswordSchema = z
 type ResetPasswordForm = z.infer<typeof ResetPasswordSchema>;
 
 const ResetPassword = () => {
-  const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const params = useSearchParams();
+  const uid = params?.get("uid");
+  const token = params?.get("token");
 
   const form = useForm<ResetPasswordForm>({
     resolver: zodResolver(ResetPasswordSchema),
     defaultValues: {
-      currentPassword: "",
       newPassword: "",
       confirmPassword: "",
     },
   });
 
-  const onSubmit = (data: ResetPasswordForm) => {
-    console.log(data);
+  const onSubmit = async (data: ResetPasswordForm) => {
+    try {
+      if (!uid || !token) {
+        return toast.error("Unauthorized");
+      }
+
+      const { status, val: response } = await resetPasswordFunction(
+        Number(uid) || null,
+        token || "",
+        data.newPassword
+      );
+
+      if (status >= 200 && status <= 300) {
+        toast.success("Your passsword has been changed successfully.");
+      } else {
+        toast.error("Failed to change password.");
+      }
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Internal Server Error";
+      console.log(errorMessage);
+    }
   };
 
   return (
@@ -70,34 +93,6 @@ const ResetPassword = () => {
             onSubmit={form.handleSubmit(onSubmit)}
             className='space-y-4 text-left'
           >
-            <FormField
-              control={form.control}
-              name='currentPassword'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Current Password</FormLabel>
-                  <FormControl>
-                    <div className='relative'>
-                      <Input
-                        type={showCurrent ? "text" : "password"}
-                        className='py-5 pr-12 '
-                        placeholder='Enter your current password'
-                        {...field}
-                      />
-                      <button
-                        type='button'
-                        onClick={() => setShowCurrent((prev) => !prev)}
-                        className='absolute inset-y-0 right-3 flex items-center text-gray-500'
-                      >
-                        {showCurrent ? <FaEyeSlash /> : <FaEye />}
-                      </button>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
             <FormField
               control={form.control}
               name='newPassword'

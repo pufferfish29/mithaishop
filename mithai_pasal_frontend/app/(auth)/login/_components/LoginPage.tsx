@@ -42,7 +42,6 @@ const Login = () => {
   const { setError } = form;
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
-      console.log(data);
       const res = await authenticate(data);
       if (!res.error) {
         toast.success("Login successful");

@@ -13,11 +13,11 @@ import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import React, { useState } from "react";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
+import React from "react";
 import { LuLock } from "react-icons/lu";
 import Link from "next/link";
 import { sendResetPasswordEmail } from "@/apicalls/auth/User";
+import toast from "react-hot-toast";
 
 const changePasswordSchema = z.object({
   email: z.string().min(8, "Must be at least 8 characters"),
@@ -38,8 +38,11 @@ const ChangePassword = () => {
       const { status, data: response } = await sendResetPasswordEmail(
         data.email
       );
-      console.log(response);
-      console.log(status);
+      if (status >= 200 && status <= 300) {
+        toast.success("Please check you email to reset your password.");
+      } else {
+        toast.error("Please eneter a valid email.");
+      }
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Internal Server Error";

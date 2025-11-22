@@ -9,7 +9,6 @@ const HighestSales = () => {
   const { data: session } = useSession();
 
   const { data } = useGetTopSellingProducts(session?.accessToken, 1, 1, 1);
-  console.log(data);
 
   return (
     <div className='w-[25%] bg-orange-200  px-5 py-5 rounded-xl'>

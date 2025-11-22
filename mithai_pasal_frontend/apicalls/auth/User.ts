@@ -80,17 +80,44 @@ export async function sendResetPasswordEmail(email: string) {
       `${baseUrl}/auth/forgot-password`,
       {
         email,
-      },
-      { headers: { Authorization: "" } }
+      }
     );
-
-    console.log(response);
 
     const data = await response.data;
 
     return {
       status: response.status,
       data,
+    };
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : "An unexpected error occurred.";
+    return {
+      status: 500,
+      data: { message: errorMessage },
+    };
+  }
+}
+
+export async function resetPasswordFunction(
+  userId: number | null,
+  token: string,
+  newPassword: string
+) {
+  try {
+    const response = await axiosInstance.post(
+      `${baseUrl}/auth/reset-password`,
+      {
+        userId,
+        token,
+        newPassword,
+      }
+    );
+    const val = await response.data;
+
+    return {
+      status: response.status,
+      val,
     };
   } catch (error) {
     const errorMessage =

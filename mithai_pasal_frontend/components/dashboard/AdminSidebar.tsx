@@ -135,7 +135,7 @@ const AdminSidebar = () => {
                       if (item.title === "Logout") {
                         logout();
                       } else if (item.title === "Settings") {
-                        console.log("Settings");
+                        console.log("");
                       }
                     }}
                     className=' bg-white text-black flex items-center justify-center '

@@ -10,7 +10,6 @@ export default async function NextAuthSessionProvider({
   children: ReactNode;
 }) {
   const session = await auth();
-  console.log(session);
 
   return (
     <SessionProvider

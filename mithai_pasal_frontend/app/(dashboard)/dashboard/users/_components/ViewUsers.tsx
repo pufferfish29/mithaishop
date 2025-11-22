@@ -57,7 +57,7 @@ const ViewUsers = () => {
                   <Pencil className='cursor-pointer  w-9 hover:bg-green-400 hover:text-white hover:border-green-400 shadow-md h-9 border border-black px-2 rounded-sm' />
                   <MdDelete
                     // onClick={() => {
-                    //   console.log("Hello");
+
                     //   // setProductId(product.id);
                     //   // setDeleting(true);
                     // }}
