@@ -8,13 +8,13 @@ import { Repository } from "typeorm";
 import { Sale } from "./entities/sale.entity";
 import { Product } from "./entities/prodcut.entity";
 import { CreateSaleDto } from "./dto/create-sale.dto";
-import { SaleAggregateRow } from "./types/product.type";
+import { SaleAggregateRow, WeeklySaleSummery } from "./types/product.type";
 
 @Injectable()
 export class SaleService {
   constructor(
     @InjectRepository(Sale)
-    private readonly saleRepo: Repository<Sale>,
+    private readonly saleRepository: Repository<Sale>,
     @InjectRepository(Product)
     private readonly productRepo: Repository<Product>,
   ) {}
@@ -24,12 +24,12 @@ export class SaleService {
       where: { id: dto.productId },
     });
     if (!product) throw new NotFoundException("Product not found");
-    const sale = this.saleRepo.create({
+    const sale = this.saleRepository.create({
       product,
       quantity: dto.quantity,
       totalAmount: dto.totalAmount,
     });
-    return this.saleRepo.save(sale);
+    return this.saleRepository.save(sale);
   }
 
   async aggregateSold(range: string) {
@@ -93,7 +93,7 @@ export class SaleService {
       ),
     );
 
-    const rows: SaleAggregateRow[] = await this.saleRepo
+    const rows: SaleAggregateRow[] = await this.saleRepository
       .createQueryBuilder("s")
       .leftJoin("s.product", "p")
       .select([
@@ -148,5 +148,19 @@ export class SaleService {
       days,
       series,
     };
+  }
+
+  async getWeeklySaleSummery() {
+    const saleQuery: WeeklySaleSummery[] = await this.saleRepository
+      .createQueryBuilder("sale")
+      .select("EXTRACT(DOW from sale.created_at)", "day_of_week")
+      .addSelect("SUM(sale.total_amount)", "total_sale")
+      .groupBy("day_of_week")
+      .orderBy("day_of_week")
+      .getRawMany();
+    return saleQuery.map((s) => ({
+      day_of_week: Number(s.day_of_week),
+      total_sale: Number(s.total_sale),
+    }));
   }
 }

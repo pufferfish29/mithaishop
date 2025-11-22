@@ -18,4 +18,10 @@ export class SaleController {
   aggregate(@Query("day") day: string) {
     return this.saleService.aggregateSold(day);
   }
+
+  @Get("weeklysale")
+  @Public()
+  weeklySale() {
+    return this.saleService.getWeeklySaleSummery();
+  }
 }

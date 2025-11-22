@@ -5,3 +5,8 @@ export interface SaleAggregateRow {
   total_qty: string;
   total_amount: string;
 }
+
+export interface WeeklySaleSummery {
+  day_of_week: number;
+  total_sale: number;
+}
