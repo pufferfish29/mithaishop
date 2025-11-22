@@ -1,10 +1,10 @@
-import { IsEmail, IsString, IsStrongPassword, Length } from 'class-validator';
+import { IsEmail, IsString, Length } from "class-validator";
 import {
   COLUMN_DEFAULT_LENGTH,
   EMAIL_MIN_LENGTH,
   PASSWORD_MIN_LENGTH,
   USERNAME_MIN_LENGTH,
-} from '../constants/constants';
+} from "../constants/constants";
 
 export class CreateUserDto {
   @IsString()
@@ -15,7 +15,6 @@ export class CreateUserDto {
   @Length(EMAIL_MIN_LENGTH, COLUMN_DEFAULT_LENGTH)
   email: string;
 
-  @IsStrongPassword()
   @Length(PASSWORD_MIN_LENGTH, COLUMN_DEFAULT_LENGTH)
   password: string;
 }

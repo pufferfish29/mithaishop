@@ -5,8 +5,8 @@ Content-Type: application/json
 
 {
   "username": "mithai",
-  "password": "Applefruit#12",
-  "email": "mithaishop475@gmail.com"
+  "password": "sdfdsAplef12#",
+  "email": "admin@example.com"
 }
 
 
@@ -16,8 +16,8 @@ POST {{baseUrl}}/api/auth/signin
 Content-Type: application/json
 
 {
-  "password": "Applefruit#12",
-  "email": "mithaishop475@gmail.com"
+  "password": "sdfdsAplef12#",
+  "email": "admin@example.com"
 }
 
 # @after

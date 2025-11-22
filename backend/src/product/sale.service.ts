@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Sale } from "./entities/sale.entity";
@@ -31,7 +35,7 @@ export class SaleService {
   async aggregateSold(range: string) {
     const match = /^([1-9]\d*)(day|week|month)$/.exec(range || "");
     if (!match) {
-      throw new Error(
+      throw new BadRequestException(
         "Invalid 'day' query. Use like 7day, 1week, 1month, 3month",
       );
     }
