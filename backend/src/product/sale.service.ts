@@ -155,6 +155,7 @@ export class SaleService {
       .createQueryBuilder("sale")
       .select("EXTRACT(DOW from sale.created_at)", "day_of_week")
       .addSelect("SUM(sale.total_amount)", "total_sale")
+      .where("sale.created_at >= date_trunc('week', NOW()) - interval '1 day' ")
       .groupBy("day_of_week")
       .orderBy("day_of_week")
       .getRawMany();
