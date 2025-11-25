@@ -43,11 +43,11 @@ const Login = () => {
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
       const res = await authenticate(data);
-      if (!res.error) {
+      if (res.success) {
         toast.success("Login successful");
-        router.push("/dashboard/sales");
+        window.location.href = "/dashboard/sales";
       } else {
-        toast.error("Invalid credentials");
+        toast.error("Login Failed");
       }
     } catch (err: any) {
       if (axios.isAxiosError(err)) {

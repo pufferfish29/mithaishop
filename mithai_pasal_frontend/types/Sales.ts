@@ -11,6 +11,11 @@ export interface SalesClientResponse {
   series: SalesSeriesResponse[];
 }
 
+export interface WeeklySalesResponse {
+  day_of_week: number;
+  total_sale: number;
+}
+
 export interface SalesSeriesResponse {
   productId: number;
   productName: number;

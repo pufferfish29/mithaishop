@@ -19,11 +19,16 @@ async function loginWithEmailAndPassword(email: string, password: string) {
       throw new Error("Invalid email or password");
     }
 
-    const data: LoginResponseData = await res.json();
-    return data as LoginResponseData;
-  } catch (error: any) {
-    // console.error("Login error:", error);
-    throw new Error("Something went wrong during login");
+    const data = await res.json();
+    // console.log("Backend Data: ", data);
+    return data;
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error
+        ? error.message
+        : "Something went wrong during login";
+    console.error("Login error:", errorMessage);
+    throw new Error(errorMessage);
   }
 }
 
@@ -48,10 +53,9 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         const decodedAccess = jwtDecode(res.accessToken);
         const userData = {
           ...res,
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
+          accessToken: res?.accessToken,
+          refreshToken: res?.refreshToken,
           email,
-
           accessTokenExpires:
             (decodedAccess?.exp ??
               Math.floor(Date.now() / 1000) + AUTH_CONFIG.accessTokenExpiry) *

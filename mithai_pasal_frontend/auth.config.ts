@@ -26,9 +26,8 @@ export async function refreshToken(token: any) {
 
     return {
       ...token,
-      accessToken: data.accessToken || data.access,
-      accessTokenExpires:
-        (decodedAccess?.exp ?? Math.floor(Date.now() / 1000) + 3600) * 1000, // fallback 1 hour
+      accessToken: data.access || data.accessToken,
+      accessTokenExpires: decodedAccess.exp * 1000,
       refreshToken: data.refresh || token.refreshToken, // optional: use new refresh token if provided
     };
   } catch (error) {
@@ -42,7 +41,7 @@ export async function refreshToken(token: any) {
 
 export const authConfig = {
   pages: {
-    signIn: "/auth/token/",
+    signIn: "/login",
   },
   callbacks: {
     async jwt({ token, user }: { token: any; user?: any }) {
@@ -53,7 +52,7 @@ export const authConfig = {
         token.email = user.email;
         token.role = user.role;
         token.username = user.username;
-
+        console.log("User: ", user);
         return token;
       }
 
@@ -78,13 +77,15 @@ export const authConfig = {
       session.refreshToken = token.refreshToken;
       session.error = token.error;
       session.expires = new Date(token.accessTokenExpires).toISOString();
-      console.log("Session: ", session);
+      // console.log("Session: ", session);
       return session;
     },
   },
   session: {
     strategy: "jwt",
   },
-  secret: process.env.AUTH_SECRECT || "a14ae118886929bcb27dd92b35d2efcd",
+  secret:
+    process.env.AUTH_SECRECT ||
+    "GLdhybW/kXIprBU3Y/zCuzvB56wqwhlM4TKwnHvS2xZKPfLjFTJ3EkKNAkY=",
   providers: [],
 } satisfies NextAuthConfig;

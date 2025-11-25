@@ -48,6 +48,8 @@ const AddSalesForm = () => {
     limit
   );
 
+  console.log(products);
+
   const form = useForm<SalesForm>({
     resolver: zodResolver(SalesSchema),
     defaultValues: {
@@ -102,7 +104,14 @@ const AddSalesForm = () => {
                 <FormLabel>Product ID</FormLabel>
                 <FormControl>
                   <Select
-                    onValueChange={(value) => field.onChange(Number(value))}
+                    onValueChange={(value) => {
+                      // console.log("Selected Product ID:", value);
+                      // const val = products?.items.filter(
+                      //   (va) => Number(va.id) === Number(value)
+                      // );
+                      // console.log(val);
+                      field.onChange(Number(value));
+                    }}
                     value={field.value ? String(field.value) : ""}
                   >
                     <SelectTrigger className='w-full'>

@@ -16,16 +16,16 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useSession } from "next-auth/react";
-import { useGetWeekSales } from "@/hooks/salesQueries";
+import { useGetWeekSalesData } from "@/hooks/salesQueries";
 export const description = "A simple area chart";
 const chartData = [
-  { day: "Sunday", amount: 186 },
-  { day: "Monday", amount: 305 },
-  { day: "Tuesday", amount: 237 },
-  { day: "Wednesday", amount: 73 },
-  { day: "Thursday", amount: 209 },
-  { day: "Friday", amount: 214 },
-  { day: "Saturday", amount: 204 },
+  { day: "Sunday", amount: 0 },
+  { day: "Monday", amount: 0 },
+  { day: "Tuesday", amount: 0 },
+  { day: "Wednesday", amount: 0 },
+  { day: "Thursday", amount: 0 },
+  { day: "Friday", amount: 0 },
+  { day: "Saturday", amount: 0 },
 ];
 
 interface ChartSalesProps {
@@ -43,26 +43,12 @@ const chartConfig = {
 const Graph = () => {
   const { data: session } = useSession();
 
-  const { data: weekly } = useGetWeekSales(session?.accessToken, 1, 1, 1);
+  const { data: weekly } = useGetWeekSalesData(session?.accessToken, 1, 1, 1);
 
   console.log(weekly);
 
-  const weeklyChartData = weekly
-    ? weekly.series
-        .map((w) =>
-          w.data.map((d: ChartSalesProps) => {
-            const parsedDate = new Date(d.date);
-            const getDayName = parsedDate.toLocaleDateString("en-US", {
-              weekday: "long",
-            });
-            return {
-              day: getDayName,
-              amount: d.amount,
-            };
-          })
-        )
-        .flat()
-    : chartData;
+  const weeklyChartData =
+    weekly && weekly.length === 0 ? weekly.flat() : chartData;
 
   return (
     <Card className='bg-orange-200  w-[75%] max-lg:w-full shadow-none'>
