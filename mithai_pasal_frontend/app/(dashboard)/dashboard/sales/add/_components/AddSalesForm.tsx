@@ -28,10 +28,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+interface Product {
+  id: number;
+  name: string;
+  pricePerKG: number;
+  unitPrice: number;
+}
+
 const SalesSchema = z.object({
   productId: z.number().min(1, "Product ID is required"),
   quantity: z.number().min(1, "Quantity must be at least 1"),
-  totalAmount: z.number().positive("Total amount must be greater than 0"),
+  totalAmount: z.number(),
 });
 
 type SalesForm = z.infer<typeof SalesSchema>;
@@ -41,6 +48,8 @@ const AddSalesForm = () => {
   const { data: session } = useSession();
   const [limit, setLimit] = useState(1);
   const [pageParams, setPageParams] = useState(1);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
 
   const { data: products } = useGetAllProducts(
     session?.accessToken,
@@ -48,31 +57,54 @@ const AddSalesForm = () => {
     limit
   );
 
-  console.log(products);
+  const [quantityType, setQuantityType] = useState<"KG" | "UNIT">("KG");
+
+  // console.log(products);
 
   const form = useForm<SalesForm>({
     resolver: zodResolver(SalesSchema),
     defaultValues: {
       productId: 0,
-      quantity: undefined,
-      totalAmount: undefined,
+      quantity: 0,
+      totalAmount: 0,
     },
   });
 
   const onSubmit = async (data: SalesForm) => {
     try {
-      const response = await addSales(data);
-
-      if (response && response.status >= 200 && response.status < 300) {
-        toast.success("Sale added successfully!");
-        router.push("/dashboard/sales");
+      if (data.quantity === 0 || data.quantity < 0) {
+        return toast.error("Quantity cannot be less than 1");
+      } else if (!data.productId) {
+        return toast.error("Select a product to add sale");
       } else {
-        toast.error("Failed to add sale");
+        const response = await addSales(data);
+
+        if (response && response.status >= 200 && response.status < 300) {
+          toast.success("Sale added successfully!");
+          router.push("/dashboard/sales");
+        } else {
+          toast.error("Failed to add sale");
+        }
       }
     } catch (error) {
       console.error(error);
       toast.error("Internal server error");
     }
+  };
+
+  const updateTotal = (qty: number) => {
+    if (!selectedProduct) {
+      if (qty <= 0) {
+        return toast.error("Quantity cannot be less than 1");
+      }
+      return;
+    }
+    const newTotal =
+      quantityType === "KG"
+        ? qty * selectedProduct?.pricePerKG
+        : qty * selectedProduct?.unitPrice;
+
+    form.setValue("totalAmount", newTotal);
   };
 
   return (
@@ -105,12 +137,18 @@ const AddSalesForm = () => {
                 <FormControl>
                   <Select
                     onValueChange={(value) => {
-                      // console.log("Selected Product ID:", value);
-                      // const val = products?.items.filter(
-                      //   (va) => Number(va.id) === Number(value)
-                      // );
-                      // console.log(val);
+                      console.log("Selected Product ID:", value);
+
                       field.onChange(Number(value));
+                      const pickItemFromProduct =
+                        products?.items.find(
+                          (val) => Number(val.id) === Number(value)
+                        ) || null;
+
+                      if (pickItemFromProduct !== null) {
+                        setSelectedProduct(pickItemFromProduct);
+                      }
+                      updateTotal(form.getValues("quantity") || 0);
                     }}
                     value={field.value ? String(field.value) : ""}
                   >
@@ -140,6 +178,23 @@ const AddSalesForm = () => {
             )}
           />
 
+          {/* Quantity  Type*/}
+          <div className='mt-6 space-y-2'>
+            <FormLabel>Quantity Type</FormLabel>
+            <Select
+              onValueChange={(val) => setQuantityType(val as "KG" | "UNIT")}
+              value={quantityType}
+            >
+              <SelectTrigger className=' w-full'>
+                <SelectValue placeholder='Select quantity type' />
+              </SelectTrigger>
+              <SelectContent className='w-full'>
+                <SelectItem value='KG'>KG</SelectItem>
+                <SelectItem value='UNIT'>UNIT</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           {/* Quantity */}
           <FormField
             control={form.control}
@@ -149,10 +204,23 @@ const AddSalesForm = () => {
                 <FormLabel>Quantity</FormLabel>
                 <FormControl>
                   <Input
-                    type='number'
+                    type='text'
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
-                    placeholder='Enter quantity'
+                    onChange={(e) => {
+                      const num = Number(e.target.value);
+                      field.onChange(num);
+                      if (num < 1) {
+                        updateTotal(Number(num));
+                        return;
+                      }
+
+                      updateTotal(Number(num));
+                    }}
+                    placeholder={
+                      quantityType === "KG"
+                        ? "Enter quantity in kg"
+                        : "Enter quantity in unit"
+                    }
                   />
                 </FormControl>
                 <FormMessage />
@@ -161,6 +229,7 @@ const AddSalesForm = () => {
           />
 
           {/* Total Amount */}
+
           <FormField
             control={form.control}
             name='totalAmount'
@@ -171,7 +240,7 @@ const AddSalesForm = () => {
                   <Input
                     type='number'
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    disabled
                     placeholder='Enter total amount'
                   />
                 </FormControl>

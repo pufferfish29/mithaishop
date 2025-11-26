@@ -15,29 +15,34 @@ const Sales = () => {
   const { data: weekly } = useGetWeekSales(session?.accessToken, 1, 1, 1);
   const { data: monthly } = useGetMonthSales(session?.accessToken, 1, 1, 1);
 
-  const dailySales = daily
-    ? daily.series.map((s) => s.data.map((d) => d.amount))
-    : "1,450";
+  console.log(daily);
 
-  const weeklySales = weekly
-    ? weekly.series.map((s) => {
-        const totalWeeklySales = s.data.reduce(
-          (amt, current) => amt + current.amount,
-          0
-        );
-        return totalWeeklySales;
-      })
-    : "12,450";
+  const dailySales =
+    daily && daily?.series?.length > 0
+      ? daily.series.map((s) => s.data.map((d) => d.amount))
+      : "0";
 
-  const monthlySales = monthly
-    ? monthly.series.map((s) => {
-        const totalMonthlySales = s.data.reduce(
-          (amt, current) => amt + current.amount,
-          0
-        );
-        return totalMonthlySales;
-      })
-    : "45,820.50";
+  const weeklySales =
+    weekly && weekly?.series?.length > 0
+      ? weekly.series.map((s) => {
+          const totalWeeklySales = s.data.reduce(
+            (amt, current) => amt + current.amount,
+            0
+          );
+          return totalWeeklySales;
+        })
+      : "0";
+
+  const monthlySales =
+    monthly && monthly?.series?.length > 0
+      ? monthly.series.map((s) => {
+          const totalMonthlySales = s.data.reduce(
+            (amt, current) => amt + current.amount,
+            0
+          );
+          return totalMonthlySales;
+        })
+      : "0";
 
   return (
     <div>
@@ -51,7 +56,7 @@ const Sales = () => {
         <div className='bg-orange-200 px-10 py-8 w-1/2 max-lg:w-full space-y-2 rounded-xl  '>
           <h1 className='text-orange-700'>Weekly Sales</h1>
           <p className='font-bold text-orange-900 text-3xl'>
-            ${weeklySales ? weeklySales[0] : "12,450"}
+            ${weeklySales ? weeklySales[0] : "0"}
           </p>
           {/* <p className='text-green-500 font-bold'>+5.2% from last week</p> */}
         </div>
@@ -59,7 +64,7 @@ const Sales = () => {
         <div className='bg-orange-200 px-10 py-8 w-1/2 max-lg:w-full space-y-2 rounded-xl  '>
           <h1 className='text-orange-700'>Monthly Sales</h1>
           <p className='font-bold text-orange-900 text-3xl'>
-            ${monthlySales ? monthlySales[0] : "45,820.50"}
+            ${monthlySales ? monthlySales[0] : "0"}
           </p>
           {/* <p className='text-green-500 font-bold'>+8.1% from last month</p> */}
         </div>

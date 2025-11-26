@@ -87,11 +87,6 @@ const AdminSidebar = () => {
                       session?.user.role !== "admin"
                     ) {
                       return false;
-                    } else if (
-                      menu.title !== "Users" &&
-                      session?.user.role == "admin"
-                    ) {
-                      return false;
                     }
                     return true;
                   })

@@ -43,12 +43,14 @@ const chartConfig = {
 const Graph = () => {
   const { data: session } = useSession();
 
-  const { data: weekly } = useGetWeekSalesData(session?.accessToken, 1, 1, 1);
+  const { data: weekly } = useGetWeekSalesData(session?.accessToken);
 
-  console.log(weekly);
+  // console.log(weekly);
 
   const weeklyChartData =
     weekly && weekly.length === 0 ? weekly.flat() : chartData;
+
+  console.log(weeklyChartData);
 
   return (
     <Card className='bg-orange-200  w-[75%] max-lg:w-full shadow-none'>

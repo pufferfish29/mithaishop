@@ -8,7 +8,7 @@ import React from "react";
 const HighestSales = () => {
   const { data: session } = useSession();
 
-  const { data } = useGetTopSellingProducts(session?.accessToken, 1, 1, 1);
+  const { data } = useGetTopSellingProducts(session?.accessToken, 1, 1, 7);
 
   return (
     <div className='w-[25%] max-lg:w-full bg-orange-200  px-5 py-5 rounded-xl '>

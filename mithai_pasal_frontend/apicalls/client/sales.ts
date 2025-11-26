@@ -29,11 +29,7 @@ export const getDailySales = async (
   }
 };
 
-export const getWeeklySalesData = async (
-  week = 1,
-  limit = 10,
-  token: string | undefined
-) => {
+export const getWeeklySalesData = async (token: string | undefined) => {
   try {
     const response = await GetRequest(
       `${baseUrl}/sale/weeklysale`,
@@ -122,7 +118,7 @@ export const getThreeMonthSales = async (
 };
 
 export const topSellingProducts = async (
-  day = 1,
+  day = 7,
   limit = 10,
   token: string | undefined
 ) => {

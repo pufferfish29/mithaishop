@@ -48,15 +48,10 @@ export const useGetWeekSales = (
   };
 };
 
-export const useGetWeekSalesData = (
-  token: string | undefined,
-  pageParams: number,
-  limit: number,
-  week: number
-) => {
+export const useGetWeekSalesData = (token: string | undefined) => {
   const { data, isLoading, isPending } = useQuery({
-    queryKey: ["salesWeekly", pageParams, limit],
-    queryFn: () => getWeeklySalesData(week, limit, token),
+    queryKey: ["salesWeekly"],
+    queryFn: () => getWeeklySalesData(token),
     placeholderData: keepPreviousData,
     enabled: !!token,
   });
