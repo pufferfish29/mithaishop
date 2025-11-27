@@ -18,7 +18,7 @@ export interface WeeklySalesResponse {
 
 export interface SalesSeriesResponse {
   productId: number;
-  productName: number;
+  productName: string;
   data: SalesSeriesDataResponse[];
 }
 

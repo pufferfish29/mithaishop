@@ -95,7 +95,7 @@ const AddSalesForm = () => {
   const updateTotal = (qty: number) => {
     if (!selectedProduct) {
       if (qty <= 0) {
-        return toast.error("Quantity cannot be less than 1");
+        return;
       }
       return;
     }
@@ -137,7 +137,7 @@ const AddSalesForm = () => {
                 <FormControl>
                   <Select
                     onValueChange={(value) => {
-                      console.log("Selected Product ID:", value);
+                      // console.log("Selected Product ID:", value);
 
                       field.onChange(Number(value));
                       const pickItemFromProduct =

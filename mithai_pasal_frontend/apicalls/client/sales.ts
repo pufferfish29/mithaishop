@@ -49,8 +49,8 @@ export const getWeeklySalesData = async (token: string | undefined) => {
 };
 
 export const getWeeklySales = async (
-  week = 1,
-  limit = 10,
+  week: number,
+  limit: number,
   token: string | undefined
 ) => {
   try {

@@ -15,8 +15,6 @@ const Sales = () => {
   const { data: weekly } = useGetWeekSales(session?.accessToken, 1, 1, 1);
   const { data: monthly } = useGetMonthSales(session?.accessToken, 1, 1, 1);
 
-  console.log(daily);
-
   const dailySales =
     daily && daily?.series?.length > 0
       ? daily.series.map((s) => s.data.map((d) => d.amount))
