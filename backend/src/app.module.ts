@@ -14,7 +14,7 @@ import { ProductModule } from "./product/product.module";
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({ ...datasource.options }),
+    TypeOrmModule.forRoot({ ...datasource.options, autoLoadEntities: true }),
     ConfigModule.forRoot({ isGlobal: true }),
     UserModule,
     AuthModule,
