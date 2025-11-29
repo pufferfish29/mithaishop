@@ -8,8 +8,8 @@ export const datasource = new DataSource({
   url: process.env.POSTGRES_URL,
   ssl: true,
   entities: [
-    process.cwd() + "/dist/**/*.entity.js",
     __dirname + "//**/*.entity{.ts,.js}",
+    process.cwd() + "/dist/**/*.entity.js",
   ],
   migrations: [
     process.cwd() + "/dist/migrations/*.js",
