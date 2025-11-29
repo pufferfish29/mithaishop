@@ -7,7 +7,10 @@ export const datasource = new DataSource({
   type: "postgres",
   url: process.env.POSTGRES_URL,
   ssl: true,
-  entities: [process.cwd() + "/dist/**/*.entity.js"],
+  entities: [
+    process.cwd() + "/dist/**/*.entity.js",
+    __dirname + "//**/*.entity{.ts,.js}",
+  ],
   migrations: [
     process.cwd() + "/dist/migrations/*.js",
     process.cwd() + "/src/migrations/*.ts",
