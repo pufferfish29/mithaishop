@@ -3,6 +3,7 @@ import {
   getMonthlySales,
   getThreeMonthSales,
   getWeeklySales,
+  getWeeklySalesData,
   topSellingProducts,
 } from "@/apicalls/client/sales";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
@@ -36,6 +37,21 @@ export const useGetWeekSales = (
   const { data, isLoading, isPending } = useQuery({
     queryKey: ["salesWeekly", pageParams, limit],
     queryFn: () => getWeeklySales(week, limit, token),
+    placeholderData: keepPreviousData,
+    enabled: !!token,
+  });
+
+  return {
+    data,
+    isLoading,
+    isPending,
+  };
+};
+
+export const useGetWeekSalesData = (token: string | undefined) => {
+  const { data, isLoading, isPending } = useQuery({
+    queryKey: ["salesWeekly"],
+    queryFn: () => getWeeklySalesData(token),
     placeholderData: keepPreviousData,
     enabled: !!token,
   });

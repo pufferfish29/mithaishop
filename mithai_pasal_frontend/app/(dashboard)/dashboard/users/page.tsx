@@ -1,10 +1,22 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import ViewUsers from "./_components/ViewUsers";
-import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (session?.user.role === "user") {
+      router.push("/dashboard/sales");
+    }
+  }, [session?.user.role]);
+
   return (
     <div className='max-w-[1500px] mx-auto'>
       <div className='px-10'>

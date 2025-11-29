@@ -15,19 +15,18 @@ export default function AuthWrapper({
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    if (session) {
-    } else {
+    if (status === "unauthenticated") {
       router.push("/login");
     }
-  }, [session, status]);
+  }, [status]);
+
+  if (status === "loading") {
+    return <Loading />;
+  }
 
   if (status === "authenticated") {
     return <>{children}</>;
   }
 
-  return (
-    <>
-      <Loading />
-    </>
-  );
+  return <Loading />;
 }

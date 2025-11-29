@@ -1,6 +1,10 @@
 import { GetRequest } from "@/lib/axios/axios";
 import { baseUrl } from "@/lib/baseUrl";
-import { SalesClientResponse, TopSellingProductResponse } from "@/types/Sales";
+import {
+  SalesClientResponse,
+  TopSellingProductResponse,
+  WeeklySalesResponse,
+} from "@/types/Sales";
 
 export const getDailySales = async (
   day = 1,
@@ -25,9 +29,28 @@ export const getDailySales = async (
   }
 };
 
+export const getWeeklySalesData = async (token: string | undefined) => {
+  try {
+    const response = await GetRequest(
+      `${baseUrl}/sale/weeklysale`,
+      {},
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data as WeeklySalesResponse[];
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const getWeeklySales = async (
-  week = 1,
-  limit = 10,
+  week: number,
+  limit: number,
   token: string | undefined
 ) => {
   try {
@@ -95,7 +118,7 @@ export const getThreeMonthSales = async (
 };
 
 export const topSellingProducts = async (
-  day = 1,
+  day = 7,
   limit = 10,
   token: string | undefined
 ) => {

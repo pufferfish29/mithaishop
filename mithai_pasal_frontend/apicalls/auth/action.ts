@@ -3,7 +3,7 @@
 import { signIn, signOut } from "@/auth";
 // import { TLogin } from "@/schemas/authSchema";
 import { LoginInterface } from "@/types/User";
-import { AuthError } from "next-auth";
+// import { AuthError } from "next-auth";
 
 export async function authenticate(formData: LoginInterface) {
   try {
@@ -13,21 +13,18 @@ export async function authenticate(formData: LoginInterface) {
       redirect: false,
     });
 
-    if (data && data.error) {
-      throw new Error(data.error);
+    if (!data || data.error) {
+      return {
+        success: false,
+        error: data?.error || "Invalid credentials!!!",
+      };
     }
 
-    return data;
+    return {
+      success: true,
+    };
   } catch (error) {
-    if (error instanceof AuthError) {
-      switch (error.type) {
-        case "CredentialsSignin":
-          return "Invalid credentials.";
-        default:
-          return "Something went wrong.";
-      }
-    }
-    return "An unexpected error occurred.";
+    return { success: false, error: "Something went wrong" };
   }
 }
 

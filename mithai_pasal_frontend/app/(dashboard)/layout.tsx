@@ -11,7 +11,6 @@ export default function DashboardLayout({
 }>) {
   return (
     <AuthWrapper>
-      {" "}
       <div className='bg-[#f7f1ed]'>
         <SidebarProvider>
           <AdminSidebar />

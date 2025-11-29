@@ -28,7 +28,9 @@ const page = () => {
 
       <Sales />
       <div className='flex gap-5 mt-6 max-lg:flex-col'>
-        <Graph />
+        <div className='  w-[75%] max-lg:w-full shadow-none space-y-2'>
+          <Graph />
+        </div>
         <HighestSales />
       </div>
     </div>
