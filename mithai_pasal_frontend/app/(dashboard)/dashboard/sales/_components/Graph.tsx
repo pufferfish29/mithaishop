@@ -1,6 +1,15 @@
 "use client";
 import { TrendingUp } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  LabelList,
+  Line,
+  LineChart,
+  XAxis,
+  YAxis,
+} from "recharts";
 import {
   Card,
   CardContent,
@@ -58,6 +67,10 @@ const chartConfig = {
   desktop: {
     label: "Desktop",
     color: "var(--chart-1)",
+  },
+  mobile: {
+    label: "Mobile",
+    color: "var(--chart-2)",
   },
 } satisfies ChartConfig;
 const Graph = () => {
@@ -127,7 +140,7 @@ const Graph = () => {
 
         <CardContent>
           <ChartContainer config={chartConfig}>
-            <AreaChart
+            <LineChart
               accessibilityLayer
               data={
                 graphType === "PRODUCT" && selecteProduct
@@ -135,8 +148,10 @@ const Graph = () => {
                   : weeklyChartData
               }
               margin={{
+                top: 20,
                 left: 12,
                 right: 12,
+                bottom: 12,
               }}
             >
               <YAxis domain={[0, (dataMax: any) => dataMax + 500]} />
@@ -152,25 +167,38 @@ const Graph = () => {
                 cursor={false}
                 content={<ChartTooltipContent indicator='line' />}
               />
-              <Area
+              <Line
                 dataKey='amount'
                 type='natural'
-                fill='var(--color-desktop)'
-                fillOpacity={0.4}
-                stroke='var(--color-desktop)'
-              />
-            </AreaChart>
+                stroke='var(--chart-1)'
+                strokeWidth={3}
+                dot={{
+                  fill: "var(--chart-1)",
+                }}
+                activeDot={{
+                  r: 6,
+                }}
+              >
+                <LabelList
+                  dataKey={"amount"}
+                  position='top'
+                  offset={12}
+                  className='fill-foreground'
+                  fontSize={12}
+                />
+              </Line>
+            </LineChart>
           </ChartContainer>
         </CardContent>
         <CardFooter>
           <div className='flex w-full items-start gap-2 text-sm'>
             <div className='grid gap-2'>
               <div className='flex items-center gap-2 leading-none font-medium'>
-                Trending up by 5.2% this month{" "}
+                See the trending or most sales day in a week
                 <TrendingUp className='h-4 w-4' />
               </div>
               <div className='text-muted-foreground flex items-center gap-2 leading-none'>
-                January - June 2024
+                Sunday to Saturday
               </div>
             </div>
           </div>
