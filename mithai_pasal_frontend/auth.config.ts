@@ -2,11 +2,11 @@ import type { NextAuthConfig } from "next-auth";
 import type { Session } from "next-auth";
 import { jwtDecode } from "jwt-decode";
 import { AUTH_CONFIG } from "./config/auth";
-import { API_URL } from "./config/constant";
+import { baseUrl } from "./lib/baseUrl";
 
 export async function refreshToken(token: any) {
   try {
-    const res = await fetch(`${API_URL}/auth/refresh`, {
+    const res = await fetch(`${baseUrl}/auth/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import { authConfig } from "./auth.config";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
-import type { LoginResponseData } from "./lib/definitions";
 import { jwtDecode } from "jwt-decode";
 import { AUTH_CONFIG } from "./config/auth";
 import { baseUrl } from "./lib/baseUrl";
