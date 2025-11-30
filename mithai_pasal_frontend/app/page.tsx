@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 import { useEffect } from "react";
+import LoginPage from "./(auth)/login/page";
 
 export default function Home() {
   const router = useRouter();
@@ -15,8 +16,12 @@ export default function Home() {
       session.accessToken === null ||
       session.refreshToken === null
     ) {
-      router.push("/login");
+      router.push("/");
     }
   }, [session]);
-  return <main>Mithai Pasal</main>;
+  return (
+    <main>
+      <LoginPage />
+    </main>
+  );
 }

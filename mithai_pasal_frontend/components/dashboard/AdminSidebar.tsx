@@ -50,7 +50,7 @@ const AdminSidebar = () => {
   const logout = async () => {
     try {
       await logoutUser();
-      router.push("/login");
+      router.push("/");
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : "Internal Server Error";
