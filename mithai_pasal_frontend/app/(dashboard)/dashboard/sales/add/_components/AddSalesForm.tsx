@@ -27,6 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { SelectProduct } from "./SelectProduct";
 
 interface Product {
   id: number;
@@ -49,7 +50,7 @@ const AddSalesForm = () => {
   const [limit, setLimit] = useState(1);
   const [pageParams, setPageParams] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [previousId, setPreviousId] = useState<number>(0);
 
   const { data: products } = useGetAllProducts(
     session?.accessToken,
@@ -128,7 +129,7 @@ const AddSalesForm = () => {
           className='space-y-6 mt-10 bg-white px-10 py-6 rounded-2xl shadow-md'
         >
           {/* Product ID */}
-          <FormField
+          {/* <FormField
             control={form.control}
             name='productId'
             render={({ field }) => (
@@ -172,6 +173,38 @@ const AddSalesForm = () => {
                       )}
                     </SelectContent>
                   </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          /> */}
+          <FormField
+            control={form.control}
+            name='productId'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product Name</FormLabel>
+                <FormControl>
+                  <SelectProduct
+                    value={field.value}
+                    onChange={(val) => {
+                      if (val !== previousId) {
+                        form.setValue("quantity", 0);
+                        form.setValue("totalAmount", 0);
+                        field.onChange(val);
+
+                        const pickItemFromProduct =
+                          products?.items.find((p) => p.id === val) || null;
+
+                        if (pickItemFromProduct) {
+                          setSelectedProduct(pickItemFromProduct);
+                        }
+                        updateTotal(form.getValues("quantity") || 0);
+                        setPreviousId(val);
+                      }
+                    }}
+                    products={products?.items || []}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

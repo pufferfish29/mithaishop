@@ -63,7 +63,7 @@ const ResetPassword = () => {
 
       if (status >= 200 && status <= 300) {
         toast.success("Your passsword has been changed successfully.");
-        router.push("/login");
+        router.push("/");
       } else {
         toast.error("Failed to change password.");
       }
@@ -160,7 +160,7 @@ const ResetPassword = () => {
           </form>
         </Form>
         <div>
-          <Link href={"/login"}>
+          <Link href={"/"}>
             <span className='text-orange-500 text-sm underline'>
               Back to login Page
             </span>

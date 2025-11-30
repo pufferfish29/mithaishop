@@ -16,7 +16,7 @@ export default function AuthWrapper({
 
   useEffect(() => {
     if (status === "unauthenticated") {
-      router.push("/login");
+      router.push("/");
     }
   }, [status]);
 

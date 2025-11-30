@@ -101,7 +101,7 @@ const ChangePassword = () => {
           </form>
         </Form>
         <div>
-          <Link href={"/login"}>
+          <Link href={"/"}>
             <span className='text-orange-500 text-sm underline'>
               Back to login Page
             </span>

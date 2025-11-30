@@ -14,7 +14,7 @@ const page = () => {
       session.accessToken === null ||
       session.refreshToken === null
     ) {
-      router.push("/login");
+      router.push("/");
     }
   }, [session]);
 

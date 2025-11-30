@@ -41,7 +41,7 @@ export async function refreshToken(token: any) {
 
 export const authConfig = {
   pages: {
-    signIn: "/login",
+    signIn: "/",
   },
   callbacks: {
     async jwt({ token, user }: { token: any; user?: any }) {
