@@ -18,6 +18,7 @@ declare global {
       RESEND_API_KEY: string;
       RESEND_FROM_USER: string;
       REDIS_PASSWORD: string;
+      FRONTEND_URLS: string;
     }
   }
 }
