@@ -38,6 +38,7 @@ export class AuthController {
       sameSite: process.env.NODE_ENV !== "dev" ? "none" : "lax",
       secure: process.env.NODE_ENV !== "dev",
       httpOnly: true,
+      path: "/api",
     });
 
     /**
