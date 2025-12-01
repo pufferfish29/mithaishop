@@ -9,13 +9,6 @@ config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.enableCors({
-    origin: "https://mithaishop-frontend-application.vercel.app",
-    credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  });
-
   app.use(cookieParser());
   app.setGlobalPrefix("api");
 
