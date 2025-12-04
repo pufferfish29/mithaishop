@@ -6,7 +6,9 @@ import { productType } from "@/types/Product";
 
 export const addProduct = async (data: productType) => {
   try {
-    const response = await axiosInstance.post(`${baseUrl}/product`, data);
+    const response = await axiosInstance.post(`${baseUrl}/product`, data, {
+      withCredentials: true,
+    });
     if (response.status !== 201) {
       return {
         status: response.status,
@@ -27,11 +29,8 @@ export const addProduct = async (data: productType) => {
 
 export const deleteProductById = async (id: string) => {
   try {
-    const response = await fetch(`${baseUrl}/product/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await axiosInstance.delete(`${baseUrl}/product/${id}`, {
+      withCredentials: true,
     });
     if (response.status !== 200) {
       return {

@@ -11,10 +11,7 @@ export const getAllUsers = async (
       `${baseUrl}/auth/users`,
       {},
       {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       }
     );
 

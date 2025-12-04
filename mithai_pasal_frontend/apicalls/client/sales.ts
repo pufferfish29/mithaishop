@@ -16,10 +16,7 @@ export const getDailySales = async (
       `${baseUrl}/sale?day=${day}day`,
       {},
       {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       }
     );
 
@@ -35,10 +32,7 @@ export const getWeeklySalesData = async (token: string | undefined) => {
       `${baseUrl}/sale/weeklysale`,
       {},
       {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       }
     );
 
@@ -58,10 +52,7 @@ export const getWeeklySales = async (
       `${baseUrl}/sale?day=${week}week`,
       {},
       {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       }
     );
 
@@ -81,10 +72,7 @@ export const getMonthlySales = async (
       `${baseUrl}/sale?day=${month}month`,
       {},
       {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       }
     );
 
@@ -104,10 +92,7 @@ export const getThreeMonthSales = async (
       `${baseUrl}/sale?day=${month}month`,
       {},
       {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       }
     );
 
@@ -127,10 +112,7 @@ export const topSellingProducts = async (
       `${baseUrl}/product/top/sales?day=${day}day`,
       {},
       {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        withCredentials: true,
       }
     );
 

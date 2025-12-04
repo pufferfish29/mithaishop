@@ -1,5 +1,6 @@
 "use server";
 
+import axiosInstance from "@/lib/axios/interceptor";
 import { baseUrl } from "@/lib/baseUrl";
 import { UserAddFormInterface } from "@/types/User";
 
@@ -9,19 +10,14 @@ export async function addUser(data: UserAddFormInterface, acccess: string) {
   }
 
   try {
-    const response = await fetch(`${baseUrl}/auth/signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${acccess}`,
-      },
-      body: JSON.stringify(data),
+    const response = await axiosInstance.post(`${baseUrl}/auth/signup`, data, {
+      withCredentials: true,
     });
 
     console.log(response);
-    const val = await response.json();
+    const val = await response.data;
 
-    if (response.ok) {
+    if (response.status == 201) {
       return {
         status: response.status,
         value: val,

@@ -12,10 +12,11 @@ export const getAllProducts = async (
       `${baseUrl}/product?page=${pageParams}`,
       {},
       {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   "Content-Type": "application/json",
+        //   Authorization: `Bearer ${token}`,
+        // },
+        withCredentials: true,
       }
     );
 
