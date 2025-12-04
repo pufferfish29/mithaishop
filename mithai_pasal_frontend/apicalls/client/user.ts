@@ -7,15 +7,17 @@ export const getAllUsers = async (
   limit: number
 ) => {
   try {
-    const response = await GetRequest(
-      `${baseUrl}/auth/users`,
-      {},
-      {
-        withCredentials: true,
-      }
-    );
+    const response = await fetch(`${baseUrl}/auth/users`, {
+      method: "GET",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${token}`,
+      // },
+      credentials: "include",
+    });
+    const data = await response.json();
 
-    return response.data;
+    return data;
   } catch (error) {
     throw error;
   }

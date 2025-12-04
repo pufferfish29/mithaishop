@@ -14,7 +14,6 @@ export async function addUser(data: UserAddFormInterface, acccess: string) {
       withCredentials: true,
     });
 
-    console.log(response);
     const val = await response.data;
 
     if (response.status == 201) {

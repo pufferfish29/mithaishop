@@ -108,15 +108,17 @@ export const topSellingProducts = async (
   token: string | undefined
 ) => {
   try {
-    const response = await GetRequest(
-      `${baseUrl}/product/top/sales?day=${day}day`,
-      {},
-      {
-        withCredentials: true,
-      }
-    );
+    const response = await fetch(`${baseUrl}/product/top/sales?day=${day}day`, {
+      method: "GET",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${token}`,
+      // },
+      credentials: "include",
+    });
+    const data = await response.json();
 
-    return response.data as TopSellingProductResponse[];
+    return data as TopSellingProductResponse[];
   } catch (error) {
     throw error;
   }
