@@ -20,7 +20,7 @@ export default function Home() {
     }
   }, [session]);
   return (
-    <main className='bg-[#f7b986]'>
+    <main className='bg-[#f7b986] '>
       <LoginPage />
     </main>
   );
