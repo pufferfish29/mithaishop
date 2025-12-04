@@ -8,19 +8,17 @@ export const getAllProducts = async (
   token: string | undefined
 ) => {
   try {
-    const response = await GetRequest(
-      `${baseUrl}/product?page=${pageParams}`,
-      {},
-      {
-        // headers: {
-        //   "Content-Type": "application/json",
-        //   Authorization: `Bearer ${token}`,
-        // },
-        withCredentials: true,
-      }
-    );
+    const response = await fetch(`${baseUrl}/product?page=${pageParams}`, {
+      method: "GET",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   Authorization: `Bearer ${token}`,
+      // },
+      credentials: "include",
+    });
+    const data = await response.json();
 
-    return response.data as productGetResponseType;
+    return data as productGetResponseType;
   } catch (error) {
     throw error;
   }
